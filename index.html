@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript">
+	window.onload = function() {
+		var canvas = document.getElementById("my-canvas");
+		var context = canvas.getContext("2d");
+
+		var anterior = new Date().getTime();
+
+		requestAnimationFrame(mexerBola);
+
+		// Dados da bola
+		var x = Math.floor((Math.random() * 20) + (Math.random() * 20));
+        var y = Math.floor((Math.random() * 100) + (Math.random() * 100));
+		var raio = 5;
+		var direcao = 1;
+		var sentido = 1;
+		var velocidade = 100;
+
+		function mexerBola(){
+			var agora = new Date().getTime();
+
+			var decorrido = agora - anterior;
+
+			// Limpar o canvas
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			context.beginPath();
+			context.arc(x, y, raio, 0, Math.PI*2);
+			context.fill();
+			
+			if (canvas.width < x && direcao === 1)
+				direcao = -1
+
+			if (x <= 20 && direcao === -1)
+				direcao = 1;
+
+			if (canvas.height < y && sentido === 1)
+				sentido = -1;
+
+			if (y <= 0 && sentido === -1)
+				sentido = 1;
+			
+			x += (velocidade * decorrido / 1000) * direcao;
+			y += (velocidade * decorrido / 1000) * sentido;
+			anterior = agora;
+
+			requestAnimationFrame(mexerBola);
+		}
+
+	}
+  </script>
+</head>
+<body>
+	<canvas id="my-canvas" width="500" height="500">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>
