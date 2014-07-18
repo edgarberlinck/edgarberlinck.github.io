@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript">
+	window.onload = function() {
+		var canvas = document.getElementById("my-canvas");
+		var context = canvas.getContext("2d");
+
+		var imagem = new Image();
+		imagem.src = '../resources/images/explosao.png';
+		imagem.onload = function() {
+			/*
+              drawImage(imagem, xOrigem, yOrigem, larguraOrigem,
+                        alturaOrigem, xDestino, yDestino, larguraDestino,
+                        alturaDestino)
+			*/
+			context.drawImage(imagem,
+				              20,20,200,65 // Desenho no canvas
+				              ); 
+
+			context.drawImage(imagem,
+				              80,10,60,65, // Area de recorte (clipping)
+				              20,80,60,65 // Desenho no canvas
+				              ); 
+
+			context.drawImage(imagem,
+				              220,10,60,65, // Area de recorte (clipping)
+				              20,140,60,65 // Desenho no canvas
+				              ); 
+
+			context.drawImage(imagem,
+				              290,10,60,65, // Area de recorte (clipping)
+				              20,200,60,65 // Desenho no canvas
+				              ); 
+
+			context.drawImage(imagem,
+				              0,10,60,65, // Area de recorte (clipping)
+				              20,260,60,65 // Desenho no canvas
+				              ); 
+		}
+		
+	}
+  </script>
+</head>
+<body>
+	<canvas id="my-canvas" width="500" height="500">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>

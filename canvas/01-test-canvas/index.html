@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+    <head>
+    	<script type="text/javascript">
+    		window.onload = function() {
+    			var canvas = document.getElementById("my-canvas");
+    			var context = canvas.getContext("2d");
+    			//fillRect (x, y, largura, altura)
+    			context.fillStyle = "green"; 
+    			context.fillRect(50,50,100,100);
+    			//strokeRect (x, y, largura, altura)
+    			context.lineWidth = 3;
+    			context.strokeStyle = 'blue';
+    			context.strokeRect(70,70, 100, 100);
+    		}
+    	</script>
+    </head>
+	<body>
+		<canvas id="my-canvas" width="500" height="500">
+			Seu navegador não suporta o Canvas do HTML5.
+		</canvas>
+	</body>
+</html>

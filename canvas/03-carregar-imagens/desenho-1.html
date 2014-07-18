@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript">
+	window.onload = function() {
+		var canvas = document.getElementById("my-canvas");
+		var context = canvas.getContext("2d");
+
+		var ovni = new Image();
+		ovni.src = '../resources/images/ovni.png';
+		ovni.onload = function() {
+			//Aqui eu vou desenhar 5 ovnis, um ao lado do outro
+			var x = 20;
+			for(var i = 1; i <= 5; i++){
+				context.drawImage(ovni, x, 20, 64, 32);
+				x += 70;
+			}
+
+			var x = 20;
+			for(var i = 1; i <= 5; i++){
+				// context.drawImage(images, x, y, largura, altura)
+				context.drawImage(ovni, x, 60, 32, 16);
+				x += 70;
+			}
+		}
+		
+	}
+  </script>
+</head>
+<body>
+	<canvas id="my-canvas" width="500" height="500">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>

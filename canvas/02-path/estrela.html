@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript">
+	window.onload = function() {
+		var canvas = document.getElementById("my-canvas");
+		var context = canvas.getContext("2d");
+
+		context.beginPath();
+		// Desenhar uma estrela
+		context.moveTo(75, 250); // Ponto inicial
+		context.lineTo(150, 50);
+		context.lineTo(225, 250);
+		context.lineTo(50, 120);
+		context.lineTo(250, 120);
+		context.lineTo(75, 250);
+		// Configurar a linha
+		context.lineWidth = 2;
+		context.strokeStyle = 'red';
+		// Configurar preenchimento
+		context.fillStyle = "red"; 
+		// desenhar a estrela do pt
+		context.fill(); // Isso desenha a estrela preenchida
+		//context.stroke(); // Isso desenha apenas as linhas
+		// Posso usar os dois comandos acima juntos. Assim eu desenho as linhas e depois as preencho.
+		
+	}
+  </script>
+</head>
+<body>
+	<canvas id="my-canvas" width="500" height="500">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>

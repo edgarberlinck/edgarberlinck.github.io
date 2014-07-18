@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript">
+	window.onload = function() {
+		var canvas = document.getElementById("my-canvas");
+		var context = canvas.getContext("2d");
+		
+		context.fillStyle = 'green';
+		context.fillRect(50,50,25,25);
+
+		context.save(); // Vou salvar as definições acima na pilha
+
+		context.fillStyle = 'purple';
+		context.fillRect(100, 50, 25, 25);
+
+		context.restore(); // Volto para a configuração anterior (verde no caso);
+		context.fillRect(150, 50, 25, 25);
+
+		context.save(); 
+
+		context.fillStyle = 'red';
+		context.fillRect(200, 50, 25, 25);
+
+		context.restore();
+		context.fillRect(250, 50, 25, 25);
+
+
+	}
+  </script>
+</head>
+<body>
+	<canvas id="my-canvas" width="500" height="500">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>
