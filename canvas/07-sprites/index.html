@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <script src="animacao.js"></script>
+  <script src="bola.js"></script>
+  <script type="text/javascript">
+	var animacao;
+	var b1;
+	var b2;
+	var canvas;
+	var context;
+
+	window.onload = function() {
+		canvas = document.getElementById("my-canvas");
+		context = canvas.getContext("2d");
+		
+		b1 = new Bola(context);
+		b1.x = 100;
+		b1.y = 200;
+		b1.velocidadeX = 20;
+		b1.velocidadeY = -10;
+		b1.cor = 'red';
+		b1.raio = 20;
+
+		b2 = new Bola(context);
+		b2.x = 200;
+		b2.y = 100;
+		b2.velocidadeX = -10;
+		b2.velocidadeY = 20;
+		b2.cor = 'blue';
+		b2.raio = 30;
+
+		animacao = new Animacao(context);
+		animacao.novoSprite(b1);
+		animacao.novoSprite(b2);
+
+		animacao.ligar();
+	}
+
+	function criarBola() {
+		var cor = document.getElementById("cor");
+		var raio = document.getElementById("raio");
+
+		var ball = new Bola(context);
+		ball.x = 100;
+		ball.y = 200;
+		ball.velocidadeY = -10;
+		ball.velocidadeX = -10;
+		ball.cor = cor.value;
+		ball.raio = raio.value;
+
+		animacao.novoSprite(ball);
+
+	}
+  </script>
+</head>
+<body>
+	<fieldset>
+		<span style="display: block">Cor: </span><input type="text" id="cor" />
+		<span style="display: block">Raio: </span><input type="text" id="raio" />
+		<br />
+		<input type="button" onclick="criarBola()" value="Criar Bola" />
+	</fieldset>
+	<div style="align: border">
+		<canvas id="my-canvas" width="500" height="500">
+			Seu navegador não suporta o Canvas do HTML5.
+		</canvas>
+	</div>
+	
+</body>
+</html>
