@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript">
+	window.onload = function() {
+		var canvas = document.getElementById("my-canvas");
+		var context = canvas.getContext("2d");
+		
+		var posicao = 0;
+		desenharPersonagem();
+
+		document.addEventListener("keydown", function(evento) {
+			if (evento.keyCode === 37) { // Seta para esquerda
+				if (posicao === 0)  return;
+					posicao -= 10;
+				desenharPersonagem();
+			}
+
+			else if (evento.keyCode === 39) { // Seta para direita
+				if (posicao > canvas.width - 50) return;
+				posicao += 10;
+				desenharPersonagem();
+			}
+		});
+
+		function desenharPersonagem() {
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			context.fillRect(posicao, 100, 20, 50);
+		}
+
+	}
+  </script>
+</head>
+<body>
+	<canvas id="my-canvas" width="500" height="500">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>
