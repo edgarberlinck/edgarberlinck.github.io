@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+  <script src="teclado.js"></script>
+  <script type="text/javascript">
+	var canvas;
+	var context;
+	var posicao;
+	var teclado;
+	
+	window.onload = function() {
+		canvas = document.getElementById("my-canvas");
+		context = canvas.getContext("2d");
+
+		posicao = 0;
+		desenharPersonagem();
+		
+		teclado = new Teclado(document);
+
+		requestAnimationFrame(animar);
+
+	}
+
+	function desenharPersonagem() {
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		context.fillRect(posicao, 100, 20, 50);
+	}
+
+	function animar() {
+		if (teclado.pressionada(SETA_ESQUERDA))
+			posicao -= 10;
+		else if (teclado.pressionada(SETA_DIREITA))
+			posicao += 10;
+
+		desenharPersonagem();
+		requestAnimationFrame(animar);
+	}
+  </script>
+</head>
+<body>
+	<canvas id="my-canvas" width="500" height="500">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>
