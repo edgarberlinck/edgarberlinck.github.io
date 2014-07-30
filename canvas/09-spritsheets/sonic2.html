@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript" src="spritesheet.js"></script>	
+  <script type="text/javascript">
+	var context;
+	var sheet;
+
+	window.onload = function() {
+		var canvas = document.getElementById("my-canvas");
+		context = canvas.getContext("2d");	
+		
+		var imgSonic = new Image();
+		imgSonic.src = 'sonic.png';
+		
+		// context, imagem, linhas, colunas
+		sheet = new Spritesheet(context, imgSonic, 3, 8);
+		sheet.intervalo = 60; // 60 millisegundos
+		sheet.linha = 1; // andar para a direita
+
+		// Animação
+		imgSonic.onload = gameLoop;
+
+	}
+
+	function gameLoop(){
+		context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+		sheet.proximoQuadro();
+		sheet.desenhar(100, 100); //Desenhar no canvas na posição 100, 100
+
+		requestAnimationFrame(gameLoop);
+	}
+  </script>
+</head>
+<body>
+	<canvas id="my-canvas" width="500" height="500">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>

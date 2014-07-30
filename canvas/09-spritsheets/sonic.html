@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript">
+	window.onload = function() {
+		var canvas = document.getElementById("my-canvas");
+		var context = canvas.getContext("2d");
+
+		var imgSonic = new Image();
+		imgSonic.src = "sonic.png";
+		imgSonic.onload = function(){
+			//esse spritesheet do sonic tem 3 linhas e 8 colunas.
+			var linhas = 3;
+			var colunas = 8;
+
+			/*
+			  O spriteshhet é dividido em quadros de tamanhos iguais.
+			  Para facilitar o desenho eu vou calcular o tamanho de cada
+			  quadrado.
+			*/
+			var larguraCena = imgSonic.width / colunas;
+			var alturaCena = imgSonic.height / linhas;
+
+			var linhaDesejada = 2;
+			var colunaDesejada = 7;
+
+			// Agora vou calcular o recorte
+			var x = larguraCena * colunaDesejada;
+			var y = alturaCena * linhaDesejada;
+
+			//Definir posição onde vou desenhar a imagem no canvas;
+			var xCanvas = 100;
+			var yCanvas = 100;
+
+			context.drawImage(imgSonic, x, y, larguraCena, alturaCena, xCanvas, yCanvas, larguraCena, alturaCena);
+		}	
+		
+	}
+  </script>
+</head>
+<body>
+	<canvas id="my-canvas" width="500" height="500">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>
