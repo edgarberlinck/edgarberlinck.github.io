@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript" src="colisor.js"></script>
+  <script type="text/javascript" src="bola.js"></script>
+  <script type="text/javascript">
+	var context;
+	var colisor;
+	var b1;
+	var b2;
+	window.onload = function() {
+		var canvas = document.getElementById("my-canvas");
+		context = canvas.getContext("2d");
+		
+		b1 = new Bola(context);
+		b1.x = 200;
+		b1.y = 200;
+		b1.velocidadeX = 10;
+		b1.velocidadeY = -5;
+		b1.cor = 'blue';
+		b1.raio = 20;
+
+		b2 = new Bola(context);
+		b2.x = 300;
+		b2.y = 300;
+		b2.velocidadeX = -5;
+		b2.velocidadeY = 10;
+		b2.cor = 'red';
+		b2.raio = 30;
+
+		colisor = new Colisor();
+		colisor.novoSprite(b1);
+		colisor.novoSprite(b2);
+/*
+		colisor.aoColidir = function(sprite1, sprite2) {
+			console.log("PA!");
+		}
+*/
+		requestAnimationFrame(animar);
+		
+	}
+
+	function animar() {
+		context.clearRect(0, 0,context.canvas.width, context.canvas.height);
+		b1.atualizar();
+		b2.atualizar();
+
+		b1.desenhar();
+		b2.desenhar();
+
+		colisor.processar();
+
+		requestAnimationFrame(animar);
+	}
+  </script>
+</head>
+<body>
+	<canvas id="my-canvas" width="500" height="500">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>
