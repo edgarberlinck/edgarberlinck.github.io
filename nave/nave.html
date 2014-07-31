@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript" src="resources/js/animacao.js"></script>
+  <script type="text/javascript" src="resources/js/teclado.js"></script>
+  <script type="text/javascript" src="resources/js/nave.js"></script>
+  <script type="text/javascript" src="resources/js/tiro.js"></script>
+  <script type="text/javascript" src="resources/js/fundo.js"></script>
+  <script type="text/javascript" src="resources/js/spritesheet.js"></script>
+  <script type="text/javascript" src="resources/js/ovni.js"></script>
+  <script type="text/javascript" src="resources/js/colisor.js"></script>
+  <script type="text/javascript" src="resources/js/utils.js"></script>
+  <script type="text/javascript">
+  	var imgNave; 
+	var imgEspaco;
+	var imgEstrelas;
+	var imgNuvens;
+	var imgOvni;
+
+  	var carregadas = 0;
+  	var total = 5;
+
+	window.onload = function() {		
+		imgNave = new Image();
+		imgNave.src = "resources/images/nave-spritesheet.png";
+
+		imgEspaco = new Image();
+		imgEspaco.src = "resources/images/fundo-espaco.png";
+
+		imgEstrelas = new Image();
+		imgEstrelas.src = "resources/images/fundo-estrelas.png";
+
+		imgNuvens = new Image();
+		imgNuvens.src = "resources/images/fundo-nuvens.png";
+
+		imgOvni = new Image();
+		imgOvni.src = "resources/images/ovni.png";
+
+		imgEspaco.onload = carregando();
+		imgNuvens.onload = carregando();
+		imgEstrelas.onload = carregando();
+		imgNave.onload = carregando();
+		imgOvni.onload = carregando();
+	}
+
+	function carregando(){
+		carregadas++;
+		if (carregadas === total) iniciar();
+	}
+
+	function iniciar(){
+		var canvas = document.getElementById("game-canvas");
+		var context = canvas.getContext("2d");
+		
+		var teclado = new Teclado(document);
+		var animacao = new Animacao(context);
+		var colisor = new Colisor();
+
+		var fundoEspaco = new Fundo(context, imgEspaco);
+		fundoEspaco.velocidade = 3;
+		animacao.novoSprite(fundoEspaco);
+
+		var fundoEstrelas = new Fundo(context, imgEstrelas);
+		fundoEstrelas.velocidade = 7;
+		animacao.novoSprite(fundoEstrelas);
+
+		var fundoNuvens = new Fundo(context, imgNuvens);
+		fundoNuvens.velocidade = 10;
+		animacao.novoSprite(fundoNuvens);
+
+		var nave = new Nave(context, teclado, imgNave);
+		animacao.novoSprite(nave);
+		teclado.disparou(ESPACO, function(){ 
+			nave.atirar() 
+		});
+		
+		colisor.novoSprite(nave);
+		animacao.novoProcessamento(colisor);
+		animacao.ligar();
+
+		/* Fazer o sistema de fases, onde ao alcançar determinada pontuação o interval 
+		   fica menor e a velocidade dos ovnis aumenta. */
+		setInterval(function(){
+			// Criar os inimigos
+			var ovni = new Ovni(context, imgOvni);
+			ovni.velocidade = aleatorio(1, 5);
+			ovni.x = aleatorio(imgOvni.width, context.canvas.width - imgOvni.width);
+			ovni.y = -imgOvni.height;
+
+			animacao.novoSprite(ovni);
+			colisor.novoSprite(ovni);
+
+		}, 1000);
+	}
+
+  </script>
+</head>
+<body>
+	<canvas id="game-canvas" width="500" height="500" style="border:1px solid #000000;">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>

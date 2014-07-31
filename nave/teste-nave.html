@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript" src="resources/js/animacao.js"></script>
+  <script type="text/javascript" src="resources/js/teclado.js"></script>
+  <script type="text/javascript" src="resources/js/nave.js"></script>
+  <script type="text/javascript" src="resources/js/tiro.js"></script>
+  <script type="text/javascript">
+  	var imgNave; 
+
+  	var carregadas = 0;
+  	var total = 1;
+
+	window.onload = function() {		
+		imgNave = new Image();
+		imgNave.src = "resources/images/nave.png";
+
+		imgNave.onload = carregando();
+
+	}
+
+	function carregando(){
+		carregadas++;
+		if (carregadas === total) iniciar();
+	}
+
+	function iniciar(){
+		var canvas = document.getElementById("game-canvas");
+		var context = canvas.getContext("2d");
+
+		var teclado = new Teclado(document);
+		var animacao = new Animacao(context);
+		var nave = new Nave(context, teclado, imgNave)
+		
+		animacao.novoSprite(nave);
+		
+		teclado.disparou(ESPACO, function(){ 
+			nave.atirar() 
+		});
+		
+		animacao.ligar();
+	}
+  </script>
+</head>
+<body>
+	<canvas id="game-canvas" width="500" height="500">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>

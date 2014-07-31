@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript" src="resources/js/animacao.js"></script>
+  <script type="text/javascript" src="resources/js/fundo.js"></script>
+  <script type="text/javascript">
+	var imgEspaco;
+	var imgEstrelas;
+	var imgNuvens;
+
+	var carregadas = 0;
+	var total = 3;
+
+	window.onload = function() {		
+		imgEspaco = new Image();
+		imgEspaco.src = "resources/images/fundo-espaco.png";
+
+		imgEstrelas = new Image();
+		imgEstrelas.src = "resources/images/fundo-estrelas.png";
+
+		imgNuvens = new Image();
+		imgNuvens.src = "resources/images/fundo-nuvens.png";
+
+		imgEspaco.onload = carregando();
+		imgNuvens.onload = carregando();
+		imgEstrelas.onload = carregando();
+	}
+
+	function carregando(){
+		carregadas++;
+		if (carregadas === total) iniciar();
+	}
+
+	function iniciar(){
+		var canvas = document.getElementById("game-canvas");
+		var context = canvas.getContext("2d");
+
+		var fundoEspaco = new Fundo(context, imgEspaco);
+		var fundoEstrelas = new Fundo(context, imgEstrelas);
+		var fundoNuvens = new Fundo(context, imgNuvens);
+
+		fundoEspaco.velocidade = 3;
+		fundoEstrelas.velocidade = 7;
+		fundoNuvens.velocidade = 10;
+
+		var animacao = new Animacao(context);
+		animacao.novoSprite(fundoEspaco);
+		animacao.novoSprite(fundoEstrelas);
+		animacao.novoSprite(fundoNuvens);
+
+		animacao.ligar();
+		
+		
+	}
+  </script>
+</head>
+<body>
+	<canvas id="game-canvas" width="500" height="500">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>

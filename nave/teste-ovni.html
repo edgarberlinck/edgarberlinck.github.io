@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript" src="resources/js/animacao.js"></script>
+  <script type="text/javascript" src="resources/js/fundo.js"></script>
+  <script type="text/javascript" src="resources/js/utils.js"></script>
+  <script type="text/javascript" src="resources/js/spritesheet.js"></script>
+  <script type="text/javascript" src="resources/js/ovni.js"></script>
+  <script type="text/javascript" src="resources/js/colisor.js"></script>
+  <script type="text/javascript">
+
+  	var context;
+  	var animacao;
+	var imgOvni;
+
+	window.onload = function() {		
+		imgOvni = new Image();
+		imgOvni.src = "resources/images/ovni.png";
+		imgOvni.onload = carregando();
+	}
+
+	function carregando(){
+		iniciar();
+	}
+
+	function iniciar(){
+		var canvas = document.getElementById("game-canvas");
+		context = canvas.getContext("2d");
+		
+		animacao = new Animacao(context);	
+		animacao.ligar();
+
+		//setInterval(novoOvni, 1000);
+
+		var ovni = new Ovni(context, imgOvni);
+		ovni.velocidade = aleatorio(5, 20);
+		ovni.x = aleatorio(imgOvni.width, context.canvas.width);
+		ovni.y = 100;
+		animacao.novoSprite(ovni);
+
+	}
+	function novoOvni(){
+		// Criar os inimigos
+		
+		//colisor.novoSprite(ovni);
+
+	}
+  </script>
+</head>
+<body>
+	<canvas id="game-canvas" width="500" height="500" style="border:1px solid #000000;">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>
