@@ -1,44 +1,45 @@
-function Nave(context, teclado, imagem) {
+function Nave(context, teclado, imagem, imgExplosao) {
 	this.context = context;
 	this.teclado = teclado;
 	this.imagem = imagem;
-	this.velocidade = 5;
-	/* Aqui eu consigo realizar esses calculos por que a imagem já estara carregada quando
-	   esta classe for instanciada. */
-	this.x = this.context.canvas.width / 2 - this.imagem.width / 2 - 25;
-	this.y = this.context.canvas.height / 2 - this.imagem.height / 2;
+	this.imgExplosao = imgExplosao;
+	this.velocidade = 0;
+
+	this.x = 0;
+	this.y = 0;
 
 	this.sheet = new Spritesheet(this.context, this.imagem, 3, 2);
 	this.sheet.coluna = 0;
-	this.sheet.velocidade = 60;
+	this.sheet.intervalo = 100;
 }
 
 Nave.prototype = {
 	atualizar: function() {
+		var incremento = this.velocidade * animacao.decorrido / 1000;
 		var kb = this.teclado;
-		var direcao;
-		if (!direcao) direcao = 1;
-
+		
 		if (kb.pressionada(SETA_ESQUERDA) && this.x > 0)
-			this.x -= this.velocidade;
-		if (kb.pressionada(SETA_DIREITA) && this.x < this.context.canvas.width - this.imagem.width)
-			this.x += this.velocidade;
-		if (kb.pressionada(SETA_ACIMA) && this.y > 0) {
-			this.y -= this.velocidade;	
-			direcao = 1; //FIXME definir em constante
-		}
-		if (kb.pressionada(SETA_ABAIXO) && this.y < this.context.canvas.height - this.sheet.alturaCena) {
-			this.y += this.velocidade;
-			direcao = 0; //FIXME definir em constante
-		}
-
-		this.sheet.coluna = direcao;
-
-		this.sheet.proximoQuadro();
+			this.x -= incremento;
+		if (kb.pressionada(SETA_DIREITA) && this.x < this.context.canvas.width - this.sheet.larguraCena)
+			this.x += incremento;
+		if (kb.pressionada(SETA_ACIMA) && this.y > 0)
+			this.y -= incremento;	
+		if (kb.pressionada(SETA_ABAIXO) && this.y < this.context.canvas.height - this.sheet.alturaCena)
+			this.y += incremento;
 	},
 
 	desenhar: function(){
+		var kb = this.teclado;
+		
+		if (kb.pressionada(SETA_ESQUERDA))
+			this.sheet.linha = 1;
+		if (kb.pressionada(SETA_DIREITA))
+			this.sheet.linha = 2;
+		else
+			this.sheet.linha = 0;
+
 		this.sheet.desenhar(this.x, this.y);
+		this.sheet.proximoQuadro();
 	}, 
 
 	atirar: function() {
@@ -57,8 +58,22 @@ Nave.prototype = {
 	
 	colidiuCom: function(sprite) {
 		if (sprite instanceof Ovni) {
-			this.animacao.desligar();
-			alert('Game Over');
+			this.animacao.excluirSprite(this);
+			this.animacao.excluirSprite(sprite);
+			this.colisor.excluirSprite(this);
+			this.colisor.excluirSprite(sprite);
+
+			var explosao1 = new Explosao(this.context, this.imgExplosao, this.x, this.y);
+			var explosao2 = new Explosao(this.context, this.imgExplosao, sprite.x, sprite.y);
+			
+			this.animacao.novoSprite(explosao1);			
+			this.animacao.novoSprite(explosao2);
+
+			explosao1.fimDaExplosao = function() {
+				this.animacao.desligar();
+				alert("Game Over")
+			}
+			
 		}
 	}
 

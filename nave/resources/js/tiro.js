@@ -1,3 +1,8 @@
+var SOM_TIRO = new Audio();
+SOM_TIRO.src = 'resources/sounds/tiro.mp3';
+SOM_TIRO.volume = 0.2;
+SOM_TIRO.load();
+
 function Tiro(context, nave) {
 	this.context = context;
 	this.nave = nave;
@@ -7,12 +12,15 @@ function Tiro(context, nave) {
 	this.altura = 20;
 	this.x = this.nave.x + nave.sheet.larguraCena / 2 - this.largura / 2;
 	this.y = this.nave.y - this.altura;
-	this.velocidade = 10;
+	this.velocidade = 500;
+
+	SOM_TIRO.currentTime = 0.0;
+	SOM_TIRO.play();
 }
 
 Tiro.prototype = {
 	atualizar: function(){
-		this.y -= this.velocidade;
+		this.y -= this.velocidade * this.animacao.decorrido / 1000;
 
 		if (this.y < -this.altura) {
 			this.animacao.excluirSprite(this);

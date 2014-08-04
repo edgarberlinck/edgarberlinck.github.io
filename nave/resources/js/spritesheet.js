@@ -8,6 +8,9 @@ function Spritesheet(context, imagem, linhas, colunas) {
 	this.coluna = 0;
     this.larguraCena = this.imagem.width / this.numColunas;
 	this.alturaCena = this.imagem.height / this.numLinhas;
+	/* Este método é executado sempre que desenhamos a última animação.
+	   deve ser sobrescrito nas outras classes que utilizam este classe.*/
+	this.fimDoCiclo = null;
 }
 
 Spritesheet.prototype = {
@@ -19,8 +22,10 @@ Spritesheet.prototype = {
 
 		if (this.coluna < this.numColunas - 1)
 			this.coluna++;
-		else
+		else {
 			this.coluna = 0;
+			if (this.fimDoCiclo) this.fimDoCiclo();
+		}
 
 		this.ultimoTempo = agora;
 	},

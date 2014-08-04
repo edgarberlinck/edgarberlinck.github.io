@@ -10,94 +10,262 @@
   <script type="text/javascript" src="resources/js/ovni.js"></script>
   <script type="text/javascript" src="resources/js/colisor.js"></script>
   <script type="text/javascript" src="resources/js/utils.js"></script>
+  <script type="text/javascript" src="resources/js/explosao.js"></script>
+  <style type="text/css">
+  	#link_jogar {
+		/* Inicia oculto */
+		display: none;
+		/* Cores e fundo */
+		color: yellow;
+		background: url(resources/images/botao-jogar.png);
+		/* Fonte */
+		font-size: 20px;
+		font-family: sans-serif;
+		/* Sem sublinhado e com sombra */
+		text-decoration: none;
+		text-shadow: 2px 2px 5px black;
+		/* Posicionamento */
+		position: absolute;
+		left: 220px;
+		top: 330px;
+		/* A imagem do botão é 72x72, descontamos os paddings */
+		width: 52px;
+		height: 26px;
+		padding: 23px 10px;
+	}
+  </style>
   <script type="text/javascript">
-  	var imgNave; 
-	var imgEspaco;
-	var imgEstrelas;
-	var imgNuvens;
-	var imgOvni;
-
   	var carregadas = 0;
-  	var total = 5;
+  	var total = 6;
+
+  	var animacao;
+	var teclado;
+	var colisor;
+	var espaco;
+	var estrelas;
+	var nuvens;
+	var nave;
+
+  	var canvas;
+	var context;
+
+	var imagens;
+	var musicaAcao;
+	var musicaIntro;
+	var musicaPause;
+
+	var jogoIniciado = false;
+
+	function iniciarJogo() {
+		document.getElementById("link_jogar").style.display = 'none';
+		musicaAcao.play();
+		musicaIntro.pause();
+		animacao.ligar();
+
+		jogoIniciado = true;
+	}
 
 	window.onload = function() {		
-		imgNave = new Image();
-		imgNave.src = "resources/images/nave-spritesheet.png";
+		canvas = document.getElementById("game-canvas");
+		context = canvas.getContext("2d");
+		carregarImagens();
+		carregarMusicas();
+		
+	}
 
-		imgEspaco = new Image();
-		imgEspaco.src = "resources/images/fundo-espaco.png";
+	function carregarImagens(){
+		imagens = {
+			espaco: "fundo-espaco.png",
+			estrelas : "fundo-estrelas.png",
+			nuvens: "fundo-nuvens.png",
+			nave: "nave-spritesheet.png",
+			ovni: "ovni.png",
+			explosao: "explosao.png"
+		};
 
-		imgEstrelas = new Image();
-		imgEstrelas.src = "resources/images/fundo-estrelas.png";
+		for (var i in imagens){
+			var img = new Image();
+			img.src = "resources/images/"+imagens[i];
+			img.onload = carregando;
 
-		imgNuvens = new Image();
-		imgNuvens.src = "resources/images/fundo-nuvens.png";
+			imagens[i] = img;
+		}
+	}
 
-		imgOvni = new Image();
-		imgOvni.src = "resources/images/ovni.png";
+	function carregarMusicas(){
+		musicaAcao = new Audio();
+		musicaAcao.src = 'resources/sounds/musica-acao.mp3';
+		musicaAcao.load();
+		musicaAcao.volume = 0.8;
+		musicaAcao.loop = true;
+		
+		musicaIntro = new Audio();
+		musicaIntro.src = 'resources/sounds/musica-intro.wav';
+		musicaIntro.load();
+		musicaIntro.volume = 1.0;
 
-		imgEspaco.onload = carregando();
-		imgNuvens.onload = carregando();
-		imgEstrelas.onload = carregando();
-		imgNave.onload = carregando();
-		imgOvni.onload = carregando();
+		musicaPause = new Audio();
+		musicaPause.src = 'resources/sounds/musica-pause.wav';
+		musicaPause.load();
+		musicaPause.volume = 0.8;
+		musicaPause.loop = true;
 	}
 
 	function carregando(){
+		context.save();
+
+		context.drawImage(imagens.espaco, 0, 0, canvas.width, canvas.height);
+
+		context.fillStyle = 'white';
+		context.strokeStyle = 'black';
+		context.font = '50px sans-serif';
+		context.fillText("Carregando...", 100, 200);
+		context.strokeText("Carregando...", 100, 200);
+
+		var tamanhoTotal = 300;
+		var tamanho = carregadas / total * tamanhoTotal;
+		context.fillStyle = 'yellow';
+		context.fillRect(100, 250, tamanho, 50);
+
 		carregadas++;
-		if (carregadas === total) iniciar();
+
+		context.restore();
+		if (carregadas === total) { 
+			iniciarObjetos();
+			mostrarIntro();
+		}
 	}
 
-	function iniciar(){
-		var canvas = document.getElementById("game-canvas");
-		var context = canvas.getContext("2d");
-		
-		var teclado = new Teclado(document);
-		var animacao = new Animacao(context);
-		var colisor = new Colisor();
+	function iniciarObjetos(){
+		animacao = new Animacao(context);
+		teclado = new Teclado(document);
+		colisor = new Colisor();
+		espaco  = new Fundo(context, imagens.espaco);
+		estrelas = new Fundo(context, imagens.estrelas);
+		nuvens = new Fundo(context, imagens.nuvens);
+		nave = new Nave(context, teclado, imagens.nave, imagens.explosao);
 
-		var fundoEspaco = new Fundo(context, imgEspaco);
-		fundoEspaco.velocidade = 3;
-		animacao.novoSprite(fundoEspaco);
-
-		var fundoEstrelas = new Fundo(context, imgEstrelas);
-		fundoEstrelas.velocidade = 7;
-		animacao.novoSprite(fundoEstrelas);
-
-		var fundoNuvens = new Fundo(context, imgNuvens);
-		fundoNuvens.velocidade = 10;
-		animacao.novoSprite(fundoNuvens);
-
-		var nave = new Nave(context, teclado, imgNave);
+		animacao.novoSprite(espaco);
+		animacao.novoSprite(estrelas);
+		animacao.novoSprite(nuvens);
 		animacao.novoSprite(nave);
-		teclado.disparou(ESPACO, function(){ 
-			nave.atirar() 
-		});
-		
+
 		colisor.novoSprite(nave);
 		animacao.novoProcessamento(colisor);
-		animacao.ligar();
 
-		/* Fazer o sistema de fases, onde ao alcançar determinada pontuação o interval 
-		   fica menor e a velocidade dos ovnis aumenta. */
-		setInterval(function(){
-			// Criar os inimigos
-			var ovni = new Ovni(context, imgOvni);
-			ovni.velocidade = aleatorio(1, 5);
-			ovni.x = aleatorio(imgOvni.width, context.canvas.width - imgOvni.width);
-			ovni.y = -imgOvni.height;
+		configuracoesIniciais();
+	}
+	
+	function mostrarIntro(){
+		document.getElementById("link_jogar").style.display = 'block';
 
-			animacao.novoSprite(ovni);
-			colisor.novoSprite(ovni);
+		context.save();
+		context.drawImage(imagens.espaco, 0, 0, canvas.width, canvas.height);
 
-		}, 1000);
+		// TODO criar uma tela mais bonita.
+		context.fillStyle = 'white';
+		context.strokeStyle = 'black';
+		context.font = '50px sans-serif';
+		context.fillText("Iniciar Jogo", 100, 200);
+		context.strokeText("Iniciar Jogo", 100, 200);
+
+		tocarIntro();
 	}
 
+	function tocarIntro() {
+		musicaIntro.play();
+		// Tocar musica ação apenas quando musicaIntro terminar
+		//musicaAcao.play();
+	}
+
+	function configuracoesIniciais(){
+		espaco.velocidade = 60;
+		estrelas.velocidade = 150;
+		nuvens.velocidade = 500;
+
+		nave.x = canvas.width / 2 - 18;
+		nave.y = canvas.height - 48;
+		nave.velocidade = 300;
+
+		ativarTiro(true);
+
+		teclado.disparou(ENTER, pausarJogo);
+		
+		//animacao.ligar();
+		criarInimigos();
+	}
+
+	function pausarJogo(){
+		if (!jogoIniciado) {
+			iniciarJogo();
+			return;
+		}
+
+		if (animacao.ligado) {
+			animacao.desligar();
+			showPauseMsg();
+			musicaAcao.pause();
+			musicaPause.play();
+		} else {
+			criarInimigos.ultimoOvni = new Date().getTime();
+			musicaAcao.play();
+			musicaPause.pause();
+			animacao.ligar();
+		}
+		ativarTiro(animacao.ligado);
+	}
+
+	function ativarTiro(ligado) {
+		teclado.disparou(ESPACO, ligado ? function(){nave.atirar()} : null);
+	}
+
+	function showPauseMsg(){
+		context.save();
+		context.fillStyle = 'white';
+		context.strokeStyle = 'black';
+		context.font = '50px sans-serif';
+		context.fillText('Pausado', 160, 200);
+		context.strokeText('Pausado', 160, 200);
+		context.restore();			
+	}
+
+	function criarInimigos(){
+		/* Fazer o sistema de fases, onde ao alcançar determinada pontuação o interval fica menor e a velocidade dos ovnis aumenta. */
+		var criadorInimigos = {
+			processar: function() {
+				if (!this.ultimoOvni) this.ultimoOvni = 0;
+				var agora = new Date().getTime();
+				var decorrido = agora - this.ultimoOvni;
+
+				if (decorrido > 1000) {
+					novoOvni();
+					this.ultimoOvni = agora;
+				}
+			}			
+		};
+
+		animacao.novoProcessamento(criadorInimigos);	
+	}
+
+	function novoOvni(){
+		var imgOvni = imagens.ovni;
+		var imgExplosao = imagens.explosao;
+
+		var ovni = new Ovni(context, imgOvni, imgExplosao);
+
+		ovni.velocidade = aleatorio(100, 200);
+		ovni.x = aleatorio(imgOvni.width, context.canvas.width - imgOvni.width);
+		ovni.y = -imgOvni.height;
+
+		animacao.novoSprite(ovni);
+		colisor.novoSprite(ovni);
+	}
   </script>
 </head>
 <body>
 	<canvas id="game-canvas" width="500" height="500" style="border:1px solid #000000;">
 		Seu navegador não suporta o Canvas do HTML5.
 	</canvas>
+	<a id="link_jogar" href="javascript: iniciarJogo()">Jogar</a>
 </body>
 </html>

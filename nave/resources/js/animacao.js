@@ -8,6 +8,9 @@ function Animacao(context){
 	this.processamentos = [];
 	this.spritesExcluir = [];
 	this.processamentosExcluir = [];
+
+	this.ultimoCiclo = 0;
+	this.decorrido = 0;
 }
 
 Animacao.prototype = {
@@ -17,6 +20,8 @@ Animacao.prototype = {
 	},
 
 	ligar: function(){
+		// Quando a nimação parar e reiniciar devemos resetar o contador de ciclos.
+		this.ultimoCiclo = 0;
 		this.ligado = true;
 		this.proximoFrame();
 	},
@@ -31,6 +36,9 @@ Animacao.prototype = {
 		/* Como o fundo é sempre atualizado não tem sentido em limpar
 		   o canvas. Com isso economizamos algum processamento. */
 		//this.limparTela();
+		var agora = new Date().getTime();
+		if (this.ultimoCiclo == 0) this.ultimoCiclo = agora;
+		this.decorrido = agora - this.ultimoCiclo;
 
 		for (var i in this.sprites)
 			this.sprites[i].atualizar();
@@ -38,10 +46,12 @@ Animacao.prototype = {
 		for (var i in this.sprites)
 			this.sprites[i].desenhar();
 
-		for (var i in this.processamentos)
+		for (var i in this.processamentos) 
 			this.processamentos[i].processar();
-
+			
 		this.processarExclusoes();
+
+		this.ultimoCiclo = agora;
 
 		var animacao = this;
 		requestAnimationFrame(function() {
