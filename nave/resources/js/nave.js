@@ -11,6 +11,9 @@ function Nave(context, teclado, imagem, imgExplosao) {
 	this.sheet = new Spritesheet(this.context, this.imagem, 3, 2);
 	this.sheet.coluna = 0;
 	this.sheet.intervalo = 100;
+
+	this.acabaramVidas = null;
+	this.vidasExtras = 3;
 }
 
 Nave.prototype = {
@@ -40,7 +43,13 @@ Nave.prototype = {
 
 		this.sheet.desenhar(this.x, this.y);
 		this.sheet.proximoQuadro();
-	}, 
+	},
+
+	posicionar: function() {
+		var canvas = this.context.canvas;
+		this.x = canvas.width / 2 - 18;
+		this.y = canvas.height - 48;
+	},
 
 	atirar: function() {
 		var t = new Tiro(this.context, this);
@@ -70,8 +79,16 @@ Nave.prototype = {
 			this.animacao.novoSprite(explosao2);
 
 			explosao1.fimDaExplosao = function() {
-				this.animacao.desligar();
-				alert("Game Over")
+				nave.vidasExtras--;
+				if (nave.vidasExtras < 0) {
+					if (nave.acabaramVidas) nave.acabaramVidas();
+				}
+				else {
+					nave.colisor.novoSprite(nave);
+					nave.animacao.novoSprite(nave);
+
+					nave.posicionar();
+				}
 			}
 			
 		}

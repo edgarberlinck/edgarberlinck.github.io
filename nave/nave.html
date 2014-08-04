@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+  <script type="text/javascript" src="resources/js/utils.js"></script>
   <script type="text/javascript" src="resources/js/animacao.js"></script>
   <script type="text/javascript" src="resources/js/teclado.js"></script>
   <script type="text/javascript" src="resources/js/nave.js"></script>
@@ -9,8 +10,8 @@
   <script type="text/javascript" src="resources/js/spritesheet.js"></script>
   <script type="text/javascript" src="resources/js/ovni.js"></script>
   <script type="text/javascript" src="resources/js/colisor.js"></script>
-  <script type="text/javascript" src="resources/js/utils.js"></script>
   <script type="text/javascript" src="resources/js/explosao.js"></script>
+  <script type="text/javascript" src="resources/js/painel.js"></script>
   <style type="text/css">
   	#link_jogar {
 		/* Inicia oculto */
@@ -33,6 +34,7 @@
 		height: 26px;
 		padding: 23px 10px;
 	}
+
   </style>
   <script type="text/javascript">
   	var carregadas = 0;
@@ -45,6 +47,7 @@
 	var estrelas;
 	var nuvens;
 	var nave;
+	var painel;
 
   	var canvas;
 	var context;
@@ -58,8 +61,10 @@
 
 	function iniciarJogo() {
 		document.getElementById("link_jogar").style.display = 'none';
+
 		musicaAcao.play();
 		musicaIntro.pause();
+		painel.pontuacao = 0;
 		animacao.ligar();
 
 		jogoIniciado = true;
@@ -116,11 +121,7 @@
 
 		context.drawImage(imagens.espaco, 0, 0, canvas.width, canvas.height);
 
-		context.fillStyle = 'white';
-		context.strokeStyle = 'black';
-		context.font = '50px sans-serif';
-		context.fillText("Carregando...", 100, 200);
-		context.strokeText("Carregando...", 100, 200);
+		escreveTexto(context, 'Carregando...');
 
 		var tamanhoTotal = 300;
 		var tamanho = carregadas / total * tamanhoTotal;
@@ -144,10 +145,12 @@
 		estrelas = new Fundo(context, imagens.estrelas);
 		nuvens = new Fundo(context, imagens.nuvens);
 		nave = new Nave(context, teclado, imagens.nave, imagens.explosao);
+		painel = new Painel(context, nave);
 
 		animacao.novoSprite(espaco);
 		animacao.novoSprite(estrelas);
 		animacao.novoSprite(nuvens);
+		animacao.novoSprite(painel);
 		animacao.novoSprite(nave);
 
 		colisor.novoSprite(nave);
@@ -163,12 +166,7 @@
 		context.drawImage(imagens.espaco, 0, 0, canvas.width, canvas.height);
 
 		// TODO criar uma tela mais bonita.
-		context.fillStyle = 'white';
-		context.strokeStyle = 'black';
-		context.font = '50px sans-serif';
-		context.fillText("Iniciar Jogo", 100, 200);
-		context.strokeText("Iniciar Jogo", 100, 200);
-
+		escreveTexto(context, 'Iniciar Jogo');
 		tocarIntro();
 	}
 
@@ -183,16 +181,30 @@
 		estrelas.velocidade = 150;
 		nuvens.velocidade = 500;
 
-		nave.x = canvas.width / 2 - 18;
-		nave.y = canvas.height - 48;
+		nave.posicionar();
 		nave.velocidade = 300;
+		nave.acabaramVidas = function() {
+			animacao.desligar();
+			showGameOver();
+		}
+
 
 		ativarTiro(true);
-
 		teclado.disparou(ENTER, pausarJogo);
 		
-		//animacao.ligar();
+		colisor.aoColidir = function(sprite1, sprite2) {
+			if ( (sprite1 instanceof Tiro && sprite2 instanceof Ovni)
+			  || (sprite2 instanceof Tiro && sprite1 instanceof Ovni) ){
+			  	painel.pontuacao += 10;
+			  }
+		}
+
 		criarInimigos();
+	}
+
+	function showGameOver() {
+		//escreveTexto(context, 'Game Over');
+		alert("Game Over");
 	}
 
 	function pausarJogo(){
@@ -260,6 +272,7 @@
 		animacao.novoSprite(ovni);
 		colisor.novoSprite(ovni);
 	}
+
   </script>
 </head>
 <body>
