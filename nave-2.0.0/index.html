@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <!-- carregar globais -->
+  <script type="text/javascript" src="resources/js/global/global-flags.js"></script>
+  <script type="text/javascript" src="resources/js/global/global-resources.js"></script>
+
+  <!-- carregar utilizatios -->
+  <script type="text/javascript" src="resources/js/utils/utils.js"></script>
+  <script type="text/javascript" src="resources/js/utils/audioUtils.js"></script>
+  <script type="text/javascript" src="resources/js/utils/imageUtils.js"></script>
+
+  <!-- Carregar engine -->
+  <script type="text/javascript" src="resources/js/engine/animacao.js"></script>
+  <script type="text/javascript" src="resources/js/engine/teclado.js"></script>
+  <script type="text/javascript" src="resources/js/engine/spritesheet.js"></script>
+  <script type="text/javascript" src="resources/js/engine/colisor.js"></script>
+    
+  <!-- Carregar elementos do jogo -->
+  <script type="text/javascript" src="resources/js/painel.js"></script>
+  <script type="text/javascript" src="resources/js/ovni.js"></script>
+  <script type="text/javascript" src="resources/js/explosao.js"></script>
+  <script type="text/javascript" src="resources/js/nave.js"></script>
+  <script type="text/javascript" src="resources/js/tiro.js"></script>
+  <script type="text/javascript" src="resources/js/fundo.js"></script>
+  <script type="text/javascript" src="resources/js/game.js"></script>
+  
+  <style type="text/css">
+
+
+  </style>
+  <script type="text/javascript">
+  		var game;
+  		window.onload = function(){
+  			var canvas = document.getElementById("game-canvas");
+  			var context = canvas.getContext("2d");
+
+  			game = new Game(context);
+  			game.loadResources();
+        game.showMainMenu();
+  		}
+  </script>
+</head>
+<body>
+	<canvas id="game-canvas" width="500" height="500" style="border:1px solid #000000;">
+		Seu navegador não suporta o Canvas do HTML5.
+	</canvas>
+</body>
+</html>
