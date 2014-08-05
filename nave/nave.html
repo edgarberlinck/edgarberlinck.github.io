@@ -48,6 +48,7 @@
 	var nuvens;
 	var nave;
 	var painel;
+	var criadorInimigos;
 
   	var canvas;
 	var context;
@@ -61,13 +62,16 @@
 
 	function iniciarJogo() {
 		document.getElementById("link_jogar").style.display = 'none';
-
+		criadorInimigos.ultimoOvni = new Date().getTime();
+		
 		musicaAcao.play();
 		musicaIntro.pause();
 		painel.pontuacao = 0;
 		animacao.ligar();
 
 		jogoIniciado = true;
+
+		ativarTiro(true);
 	}
 
 	window.onload = function() {		
@@ -203,8 +207,26 @@
 	}
 
 	function showGameOver() {
-		//escreveTexto(context, 'Game Over');
-		alert("Game Over");
+		jogoIniciado = false;
+		ativarTiro(false);
+		//teclado.disparou(ENTER, null);
+
+		musicaAcao.pause();
+		musicaAcao.currentTime = 0.0;
+
+		context.drawImage(imagens.espaco, 0, 0, canvas.width, canvas.height);
+		context.save();
+		escreveTexto(context, "GAME OVER");
+		context.restore();
+
+		document.getElementById("link_jogar").style.display = 'block';
+
+		nave.vidasExtras = 3;
+		nave.posicionar();
+		animacao.novoSprite(nave);
+		colisor.novoSprite(nave);
+
+		removerInimigos();
 	}
 
 	function pausarJogo(){
@@ -243,7 +265,7 @@
 
 	function criarInimigos(){
 		/* Fazer o sistema de fases, onde ao alcançar determinada pontuação o interval fica menor e a velocidade dos ovnis aumenta. */
-		var criadorInimigos = {
+		criadorInimigos = {
 			processar: function() {
 				if (!this.ultimoOvni) this.ultimoOvni = 0;
 				var agora = new Date().getTime();
@@ -271,6 +293,13 @@
 
 		animacao.novoSprite(ovni);
 		colisor.novoSprite(ovni);
+	}
+
+	function removerInimigos() {
+		for (var i in animacao.sprites) {
+			if (animacao.sprites[i] instanceof Ovni)
+				animacao.excluirSprite(animacao.sprites[i]);
+		}
 	}
 
   </script>
