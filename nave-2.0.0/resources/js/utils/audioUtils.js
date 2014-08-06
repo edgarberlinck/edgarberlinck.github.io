@@ -6,14 +6,14 @@ AudioUtils.prototype = {
 	loadResources: function() {
 		for (var i in audioFiles) {
 			var audio = new Audio();
-			var updateLoading = this.game.updateLoading;
+			var updateLoadingCallback = this.game.updateLoading;
 			
-			if (!updateLoading)
+			if (!updateLoadingCallback)
 				return;
 			
 			audio.src = './resources/sounds/'+audioFiles[i];
 			audio.onloadeddata = function(){ 
-				updateLoading(); 
+				updateLoadingCallback(); 
 			}
 			
 			audio.load();

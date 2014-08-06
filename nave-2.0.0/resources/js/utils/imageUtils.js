@@ -14,14 +14,14 @@ ImageUtils.prototype = {
 	carregar: function(images) {
 		for (var i in images) {
 			var img = new Image();
-			var updateLoading = this.game.updateLoading;
+			var updateLoadingCallback = this.game.updateLoading;
 			
-			if (!updateLoading)
+			if (!updateLoadingCallback)
 				return;
 			
 			img.src = './resources/images/'+images[i];
 			img.onload = function(){ 
-				updateLoading(); 
+				updateLoadingCallback(); 
 			}
 				
 			images[i] = img;

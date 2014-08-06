@@ -10,6 +10,10 @@
 function Game(context) {
 	this.context = context;
 	utils = new Utils(context);
+	
+	// Start the keyboard
+	this.teclado = new Teclado(document);
+	this.hideMainMenu();
 }
 
 Game.prototype = {
@@ -25,7 +29,7 @@ Game.prototype = {
 
 	updateLoading: function() {
 		elementsLoaded++;
-		var progress = (elementsLoaded / elementsToLoad) * 100;
+		var progress = Math.floor((elementsLoaded / elementsToLoad) * 100);
 		utils.clearScreen();
 		utils.writeText("Loading Resources "+progress+"%");
 
@@ -40,20 +44,26 @@ Game.prototype = {
 		this.context.drawImage(generalImageFiles.fundoEspaco, 0, 0, this.context.canvas.width, this.context.canvas.height);
 		this.context.restore();
 		
+		
+		mainMenu = new Menu(this.teclado);
+
+		this.teclado.disparou(SETA_ABAIXO, function() {
+			mainMenu.atualizar();
+		});
+		this.teclado.disparou(SETA_ACIMA, function() {
+			mainMenu.atualizar();
+		});
+		this.teclado.disparou(ENTER, function() {
+			mainMenu.atualizar();
+		});
+
 		document.getElementById("main-menu").style.display = "block";
+	},
 
-		// Start the keyboard
-		teclado = new Teclado(document);
-		mainMenu = new Menu(teclado);
-
-		teclado.disparou(SETA_ABAIXO, function() {
-			mainMenu.atualizar();
-		});
-		teclado.disparou(SETA_ACIMA, function() {
-			mainMenu.atualizar();
-		});
-		teclado.disparou(ENTER, function() {
-			mainMenu.atualizar();
-		});
-	}	
+	hideMainMenu: function() {
+		document.getElementById("main-menu").style.display = "none";	
+		this.teclado.disparou(SETA_ABAIXO, undefined);
+		this.teclado.disparou(SETA_ACIMA, undefined);
+		this.teclado.disparou(ENTER, undefined);
+	}
 }
