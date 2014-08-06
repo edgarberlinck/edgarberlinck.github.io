@@ -9,3 +9,6 @@
 var	elementsLoaded = 0;
 // classe de utilitarios (./resources/js/util/util.js). Instanciada em game.js (./resources/js/game.js)
 var utils;
+
+var menu = ['new-game', 'leaderboards', 'configurations', 'help'];
+var selectedMenu = 0;

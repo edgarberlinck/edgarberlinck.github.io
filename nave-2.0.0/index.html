@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+  <meta charset="utf-8">
   <!-- carregar globais -->
   <script type="text/javascript" src="resources/js/global/global-flags.js"></script>
   <script type="text/javascript" src="resources/js/global/global-resources.js"></script>
@@ -17,6 +18,7 @@
   <script type="text/javascript" src="resources/js/engine/colisor.js"></script>
     
   <!-- Carregar elementos do jogo -->
+  <script type="text/javascript" src="resources/js/menu.js"></script>
   <script type="text/javascript" src="resources/js/painel.js"></script>
   <script type="text/javascript" src="resources/js/ovni.js"></script>
   <script type="text/javascript" src="resources/js/explosao.js"></script>
@@ -26,11 +28,38 @@
   <script type="text/javascript" src="resources/js/game.js"></script>
   
   <style type="text/css">
+    @import url(http://fonts.googleapis.com/css?family=VT323);
 
+    ul li {
+      display: block;
+      border-radius: 2px;
+      text-shadow: 2px 2px 5px black;
+    }
+
+    li {
+      margin-bottom: 5px;
+      color: #FFF
+    }
+
+    li.selected {
+      color: #F2E416;
+    }
+
+    #main-menu {
+      display: none;
+      font-family: "VT323";
+      font-size: 24px;
+      position: absolute;
+      left: 160px;
+      top: 330px;
+      
+    }
 
   </style>
   <script type="text/javascript">
   		var game;
+      var teclado;
+      var mainMenu;
   		window.onload = function(){
   			var canvas = document.getElementById("game-canvas");
   			var context = canvas.getContext("2d");
@@ -45,5 +74,14 @@
 	<canvas id="game-canvas" width="500" height="500" style="border:1px solid #000000;">
 		Seu navegador não suporta o Canvas do HTML5.
 	</canvas>
+
+  <div id="main-menu">
+    <ul>
+      <li id="new-game" class="selected">New Game</li>
+      <li id="leaderboards">Leaderboards</li>
+      <li id="configurations">Configurations</li>
+      <li id="help">Help</li>
+    </ul>
+  </div>
 </body>
 </html>
