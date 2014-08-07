@@ -5,7 +5,7 @@
  * 08/05/2014 edgarberlinck: creator
  */
 
-"use strict";
+'use strict';
 
 function Game(context) {
 	this.context = context;
