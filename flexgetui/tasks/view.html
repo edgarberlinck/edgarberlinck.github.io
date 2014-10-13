@@ -15,20 +15,7 @@
 	
 	<script src="../data/data.js"></script>
 
-	<script src="../controller/tasksController.js"></script>
-
 	<title>Flexget Webui</title>
-
-	<script type="text/javascript">
-		var tasksController = new TasksController();
-
-		window.onload = function(){
-			document.getElementById("all-size").innerHTML = tasksController.getAllTasks().length;
-			document.getElementById("series-size").innerHTML = tasksController.getSeriesTask().length;
-			document.getElementById("movies-size").innerHTML = tasksController.getMoviesTask().length;
-			document.getElementById("ebooks-size").innerHTML = tasksController.getEbooksTask().length;
-		}
-	</script>
 </head>
    <body>
    <div class="container-fluid">
@@ -69,32 +56,8 @@
 
 	 		<div class="list-group"> 
 			  <a class="list-group-item">
-			    <span class="badge">
-			    	<span id="all-size"></span>
-			    </span> 
-			    <h4>All</h4>
+			    <span class="badge">0</span> <h4>All</h4>
 			    <p class="list-group-item-text">View all tasks</p>
-			  </a>
-			  <a class="list-group-item">
-			    <span class="badge" >
-			    	<span id="series-size"></span>
-			    </span> 
-			    <h4>Series</h4>
-			    <p class="list-group-item-text">View tasks related to series</p>
-			  </a>
-			  <a class="list-group-item">
-			    <span class="badge">
-			    	<span id="movies-size"></span>
-			    </span> 
-			    <h4>Movies</h4>
-			    <p class="list-group-item-text">View tasks related to movies</p>
-			  </a>
-			  <a class="list-group-item">
-			    <span class="badge">
-			    	<span id="ebooks-size"></span>
-			    </span> 
-			    <h4>eBooks</h4>
-			    <p class="list-group-item-text">View task related to eBooks</p>
 			  </a>
 			</div>
 	 	</div>
