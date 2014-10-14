@@ -12,9 +12,9 @@
 		 -URL Rewriting
 */
 
-var TaskTypeSERIE = 0;
-var TaskTypeMOVIE = 1;
-var TaskTypeEBOOK = 2;
+var TaskTypeSERIE = "0";
+var TaskTypeMOVIE = "1";
+var TaskTypeEBOOK = "2";
 
 function Task(name, taskType) {
 	this.name = name;

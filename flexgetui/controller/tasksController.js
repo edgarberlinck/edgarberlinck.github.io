@@ -37,5 +37,9 @@ TasksController.prototype = {
 			list : data,
 			length : data.length
 		}
+	},
+
+	create : function (taskType) {
+
 	}
 }
