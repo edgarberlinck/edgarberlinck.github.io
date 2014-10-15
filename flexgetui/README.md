@@ -1,21 +1,17 @@
-flexgetui.github.io
-===================
+- Funcionalidades:
 
-flexget ui preview. This is only a preview repository. The developement branch is here: https://github.com/edgarberlinck/Flexget/tree/develop/webui
+- Criar Task: Uma task é um job que é processado pelo Flexget. Este job pode ser ler um feed, baixar watchlist do imbd, etc... Veja o cookbok para mais detalhes.
+	
+	- Tipos de Task:
+		.Serie:
 
-Warning
-========
-This is a nightly version and maybe can behave bad.
+- Cosultar Tasks: Ver todas as tasks cadastradas
 
-0.1a 
+- Detalhar / Alterar Task: Abrar task para visualizar detalhes ou fazer alterações.
 
- - webui first look
+----
+TODO NEXT
+ . Create a fake DB for general testing. (DONE)
 
-0.2a
-
- - Fixed "missing jquery.min.map"
- - Basic navigation under Tasks
-
-0.3a
- 
- - Tasks listing done. Enjoy.
+ . Create a serie job.
+   The create method must call a angular event and update the badges.

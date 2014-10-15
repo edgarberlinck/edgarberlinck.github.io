@@ -52,11 +52,11 @@
 
 	function setData(data) {
 		var _ = "";
-		for (i=0; i<data.length; i++) {
+		for (var item=0; item<data.length; item++) {
 			_ += "<a class='list-group-item'>"+
-				 "<h4>"+data.list[i].name+"</h4>"+
+				 "<h4>"+data.list[item].name+"</h4>"+
 			     "	<p class='list-group-item-text'> "+
-			     	data.list[i].getItens() +
+			     	data.list[item].getItens() +
 			     "</p></a>";
 		}
 
