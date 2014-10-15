@@ -22,16 +22,47 @@
 		var tasksController = new TasksController();
 
 		var data;
-		
+		var pageHeader;
 		switch (QueryString.taskType){
-			case TaskTypeSERIE : data = tasksController.getSeriesTask(); break;
-			case TaskTypeMOVIE : data = tasksController.getMoviesTask(); break;
-			case TaskTypeEBOOK : data = tasksController.getEbooksTask(); break;
-			default: data = tasksController.getAllTasks(); break;
+			case TaskTypeSERIE : 
+				data = tasksController.getSeriesTask(); 
+				pageHeader = "Series";
+				break;
+			case TaskTypeMOVIE : 
+				data = tasksController.getMoviesTask(); 
+				pageHeader = "Movie";
+				break;
+			case TaskTypeEBOOK : 
+				data = tasksController.getEbooksTask(); 
+				pageHeader = "e-Books";
+				break;
+			default: 
+				data = tasksController.getAllTasks(); 
+				pageHeader = "All tasks";
+				break;
 		}
 
-		console.log(data);
+		setPageHeader(pageHeader);
+		setData(data);
 	}
+
+	function setPageHeader(header) {
+		document.getElementById("page-header").innerHTML = "<h1>"+header+"</h1>";
+	}
+
+	function setData(data) {
+		var _ = "";
+		for (i=0; i<data.length; i++) {
+			_ += "<a class='list-group-item'>"+
+				 "<h4>"+data.list[i].name+"</h4>"+
+			     "	<p class='list-group-item-text'> "+
+			     	data.list[i].getItens() +
+			     "</p></a>";
+		}
+
+		document.getElementById("list-group").innerHTML = _;
+	}
+
 	</script>
 
 	<title>Flexget Webui</title>
@@ -62,6 +93,8 @@
 	 </header>
 	 <content>
 	 	<div class="container">
+	 		
+
 	 		<div class="panel">
 		 		<div class="panel-body">
 			 		<button class="btn btn-default" type="button">
@@ -72,12 +105,11 @@
 			 		</button>
 		 		</div>
 	 		</div>
+			
+			<div id="page-header" class="page-header"></div>
 
-	 		<div class="list-group"> 
-			  <a class="list-group-item">
-			    <span class="badge">0</span> <h4>All</h4>
-			    <p class="list-group-item-text">View all tasks</p>
-			  </a>
+	 		<div id="list-group" class="list-group"> 
+			  
 			</div>
 	 	</div>
 	 </content>

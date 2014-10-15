@@ -25,5 +25,16 @@ Task.prototype = {
 	addSerie: function(serie){
 		if (!this.serie) this.serie = new Array();
 		this.serie.push(serie);
+	},
+
+	getItens : function () {
+		var itens = "";
+
+		if (this.serie) {
+			for (i=0;i<this.serie.length;i++)
+				itens += ( itens!==""? ", ":"") + this.serie[i].name;
+		}
+
+		return itens;
 	}
 }

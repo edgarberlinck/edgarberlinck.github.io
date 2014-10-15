@@ -15,3 +15,7 @@ This is a nightly version and maybe can behave bad.
 
  - Fixed "missing jquery.min.map"
  - Basic navigation under Tasks
+
+0.3a
+ 
+ - Tasks listing done. Enjoy.
