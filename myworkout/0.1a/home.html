@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+  <head>
+  	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="//www.parsecdn.com/js/parse-1.3.2.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <title>Welcome to My Workout</title>
+
+    <style type="text/css">
+      body {
+        font-family: 'Open Sans', sans-serif;
+      }
+
+      span {
+      	font-family: 'Open Sans', sans-serif;
+      }
+
+      .well-lg {
+      	margin-top: 1em;
+      }
+
+      .button-group {
+        margin-top: 1em;
+      }
+
+      .footer {
+		  position: absolute;
+		  bottom: 0;
+		  /* Set the fixed height of the footer here */
+		  height: 60px;
+		  text-align: center;
+		  background-color: gradient(top,#e8e8e8 0,#f5f5f5 100%);
+
+	  }
+
+	  .form {
+	  	margin-bottom: 1em;
+	  }
+    </style>
+
+  </head>
+  <body>
+  	<div class="container">
+	  	<div class="well well-lg">
+	  	  <div class="page-header">
+	        <h1>Welcome</h1>
+	        <small>Bellow you can view and edit your schedules.</small>
+	      </div>
+
+	      <div class="workout-list form">
+	      	<center><span class="fa fa-refresh fa-spin"></span></center>
+	      </div>
+
+	      <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" onclick="window.location='schedule_new.html'">
+  			<span>&nbsp;New workout</span>
+		  </button>
+
+	  	</div>
+  	</div>
+
+  	<div class="container footer">
+	 	<small>My workout is free and ad-free, and alaways will be. Developed by <span class="fa fa-twitter"></span>@edgarberlinck</small>	
+	 	<div class="powered">
+	 		<span class="fa fa-github-alt"></span>
+	 		<span class="fa fa-html5"></span>
+	 		<span class="fa fa-facebook-square"></span>
+	 		<span class="fa fa-maxcdn"></span>
+	 		<span class="fa fa-paypal"></span>
+	 	</div>
+	 </div>
+
+	 <script type="text/javascript">
+	 	localStorage.removeItem("schedule");
+
+    Parse.initialize("FE9ZFfQcp2tSVznOzsYQAbtFiAXk8x9i4rYVezn3", "zCLnaeuwGEaycCCESfXAtqlrNrMAVqbezUxN1kzS");
+	 	var currentUser = new Object();
+	 	currentUser.username = Parse.User.current().get("username");
+	 	currentUser.userId = Parse.User.current().id;
+	 	
+    var item = "<div class='panel panel-primary'>"
+              +"<div class='panel-heading'> @title </div>"
+              +"<div class='panel-body'> "
+              +"<div>Started at: <span class='label label-default'> @begin </span></div>"
+              +"<div>Ends at: <span class='label label-default'> @end </span></div>"
+              +"<div>Ends at: <span class='label label-@status'> @status_label </span></div>"
+              +"<div class='button-group' role='group'>" 
+              +"<button type='button' data-objectid='@objectId' class='btn btn-primary' onclick='start(this.dataset.objectid)'>Start this schedule</button>"
+              +"<button type='button' data-objectid='@objectId' class='btn btn-default' onclick='view(this.dataset.objectid)'>View this schedule</button>"
+              +"</div>"
+              +"</div>"
+              +"</div>";
+
+	 	Parse.Cloud.run('getschedules', currentUser, {
+        success: function(response) {
+          var datagrid = $(".workout-list")[0];
+          var retorno = "";
+          if (response.length > 0){
+            $(response).each(function(index, element){
+              retorno += item
+                 .replace("@title", element.get("schedule_name"))
+                 .replace("@begin", element.get("schedule_date_begin"))
+                 .replace("@end", element.get("schedule_date_end"))
+                 .replace("@status", Boolean(element.get("schedule_is_active")) ? "primary" : "success" )
+                 .replace("@status_label", Boolean(element.get("schedule_is_active")) ? "In progress" : "Done" ).
+                 replace(/@objectId/g, element.id);
+            });
+          } else {
+          	retorno = "<small>You dont have any schedule. You must create a new one.</small>";
+          }
+
+          datagrid.innerHTML = "";
+          datagrid.innerHTML = retorno;
+        },
+        error: function(error) {
+          console.log(error);
+        }
+      });
+
+    function start(schedule) {
+      alert("Todo");
+    }
+
+    function view(schedule) {
+      window.location = "viewschedule.html?id="+schedule;
+    }
+	 </script>
+
+  </body>
+ </html>
