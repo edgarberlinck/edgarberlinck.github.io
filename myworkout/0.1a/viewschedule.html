@@ -80,10 +80,13 @@
     var no_series_found = "<h4> Now you need to put some exercises on your workout program. Click on button below to start. </h4>";
     var serie_table = "<div class='list-group'> @rows </div>";
     var serie = "<a href='#'' class='list-group-item'> "+
-                "  <h4 class='list-group-item-heading'>@title</h4> "+
+                "  <h4 class='list-group-item-heading'>@title </h4>"+
                 "  <p class='list-group-item-text'>  "+
                 "  Sets: <span class='label label-default'> @sets </span>"+
                 "  Reps: <span class='label label-default'> @reps </span>"+
+                "  <div style='margin-top: 1em'>"+
+                "    <button type='button' data-objectid='@objectId' class='btn btn-xs btn-default' onclick='deleteExercise(this.dataset.objectid)'>Delete</button> </h4> "+
+                "  </div>"+
                 "  </p> "+
                 "</a> ";
                 
@@ -135,7 +138,8 @@
         $(schedule.parsedata.schedule_exercises).each(function(i,e){
           exercises += serie.replace("@title", e.exercise_name)
                             .replace("@sets", e.exercise_sets)
-                            .replace("@reps", e.exercise_reps);
+                            .replace("@reps", e.exercise_reps)
+                            .replace(/@objectid/g, i );
         });
 
         exercises = serie_table.replace("@rows", exercises);
@@ -152,6 +156,12 @@
 
    function goback() {
       window.location = "home.html";
+   }
+
+   function deleteExercise (exercise) {
+     schedule.parsedata.schedule_exercises.splice(exercise, 1);
+     Parse.Cloud.run("updateschedule", schedule);
+     fill();
    }
 
    function validate() {
