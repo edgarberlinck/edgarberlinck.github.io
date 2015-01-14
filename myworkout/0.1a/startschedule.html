@@ -63,7 +63,7 @@
       <nav>
       <ul class="pager">
         <li class="previous"><a href="#" onclick="previous()"><span aria-hidden="true">&larr;</span> Previous</a></li>
-        <li><a href="#" onclick="done()"><span aria-hidden="true"></span> Done </a></li>
+        <li class="done"><a href="#" onclick="done()"><span aria-hidden="true"></span> Done </a></li>
         <li class="next"><a href="#" onclick="next()">Next <span aria-hidden="true">&rarr;</span></a></li>
       </ul>
       </nav>
@@ -78,13 +78,12 @@
   schedule.userId = Parse.User.current().id; 
   var currentWorkout = JSON.parse(localStorage.getItem("currentworkout"));
   var item = "<div class='page-header'><h1>@title</h1></div><h4>Sets <span class='label label-default'>@sets</span></h4><h4>Reps <span class='label label-default'>@reps</span></h4>";
-  var empty = "<div class='page-header'><h1>@title</h1></div><small>@quote</small>";
-  if (!currentWorkout) {
+  var empty = "<div class='page-header'><h1>@title</h1></div><small>@quote</small>"+
+               "<div><button type='button' class='btn btn-xs btn-default' onclick='goback()'>Go back</button></div>";
+  if (currentWorkout === null) {
     Parse.Cloud.run("startschedule", schedule, {
-      success : function (response) {
-        currentWorkout = response;
+      success : function (response) { 
         reloadCurrentWorkout();
-        startUI();
       },
 
       error : function (response) {
@@ -99,6 +98,8 @@
     Parse.Cloud.run("getcurrentworkout", schedule, {
       success : function (response) {
         localStorage.setItem("currentworkout", JSON.stringify(response));
+		currentWorkout = response;
+        startUI();
       }
     });
   }
@@ -110,9 +111,6 @@
     l.fadeIn();
     var i = index | 0;
     c.empty();
-    if (!currentWorkout)
-      currentWorkout = JSON.parse(localStorage.getItem("currentworkout"));
-
     if (currentWorkout.length > 0) {
       c.append(item.replace("@title", currentWorkout[i].exercise_name)
                    .replace("@sets", currentWorkout[i].exercise_sets)
@@ -123,7 +121,9 @@
                     .replace("@quote", "Rest well. See you next time!"));
       $(".previous").addClass("disabled");
       $(".next").addClass("disabled");
+      $(".done").addClass("disabled");
       localStorage.removeItem("currentworkout");
+
     }
     
     l.fadeOut();
@@ -163,8 +163,10 @@
     Parse.Cloud.run("doneexercise", currentWorkout[i], {
       success : function(o) {
         currentWorkout.splice(i,1);
-        i--;
-        next();    
+        if (i > currentWorkout.length-1)
+          i = currentWorkout.length-1
+        else i = 0;
+        startUI(i);
       }, 
 
       error : function (o){
@@ -174,6 +176,10 @@
     
   }
 
+  function goback() {
+    window.location='home.html';
+  }
+  
   //TODO refactor later...
   function getUrlParams (url) {
     if (typeof url == 'undefined') {
