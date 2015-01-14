@@ -98,7 +98,6 @@
     Parse.Cloud.run("getcurrentworkout", schedule, {
       success : function (response) {
         localStorage.setItem("currentworkout", JSON.stringify(response));
-		currentWorkout = response;
         startUI();
       }
     });
@@ -111,6 +110,8 @@
     l.fadeIn();
     var i = index | 0;
     c.empty();
+	if (!currentWorkout || currentWorkout === null)
+		currentWorkout = JSON.parse(localStorage.getItem("currentworkout"));
     if (currentWorkout.length > 0) {
       c.append(item.replace("@title", currentWorkout[i].exercise_name)
                    .replace("@sets", currentWorkout[i].exercise_sets)
