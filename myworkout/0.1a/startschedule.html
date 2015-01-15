@@ -1,211 +1,37 @@
 <!doctype html>
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-    <script src="//www.parsecdn.com/js/parse-1.3.2.min.js"></script>
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <title>Welcome to My Workout</title>
-
-    <style type="text/css">
-      body {
-        font-family: 'Open Sans', sans-serif;
-      }
-
-      span {
-      	font-family: 'Open Sans', sans-serif;
-      }
-
-      .well-lg {
-      	margin-top: 1em;
-      }
-
-      .button-group {
-        margin-top: 1em;
-      }
-
-    .footer {
-		  position: absolute;
-		  bottom: 0;
-		  /* Set the fixed height of the footer here */
-		  height: 60px;
-		  text-align: center;
-		  background-color: gradient(top,#e8e8e8 0,#f5f5f5 100%);
-
-	  }
-
-    .form {
-      margin-bottom: 1em;
-    }
-
-    .alert {
-      border-color: rgba(250, 0, 0, 0.64);
-    }
-    </style>
-  </head>
-  <body>
-  	<div class="container">
-	  	<div class="well well-lg">
-        <div class="form">
-          <div class="loading">
-            <center><span class="fa fa-refresh fa-spin"></span></center>
-          </div>
-
-          <div class="current" style="display: none">
-
-          </div>
-        </div>
-	  	</div>
-      <nav>
-      <ul class="pager">
-        <li class="previous"><a href="#" onclick="previous()"><span aria-hidden="true">&larr;</span> Previous</a></li>
-        <li class="done"><a href="#" onclick="done()"><span aria-hidden="true"></span> Done </a></li>
-        <li class="next"><a href="#" onclick="next()">Next <span aria-hidden="true">&rarr;</span></a></li>
-      </ul>
-      </nav>
-  	</div>
-	 </div>
-
-	<script type="text/javascript">
-  Parse.initialize("FE9ZFfQcp2tSVznOzsYQAbtFiAXk8x9i4rYVezn3", "zCLnaeuwGEaycCCESfXAtqlrNrMAVqbezUxN1kzS");
-   
-  var schedule = new Object();
-  schedule.objectId = getUrlParams()["id"];
-  schedule.userId = Parse.User.current().id; 
-  var currentWorkout = JSON.parse(localStorage.getItem("currentworkout"));
-  var item = "<div class='page-header'><h1>@title</h1></div><h4>Sets <span class='label label-default'>@sets</span></h4><h4>Reps <span class='label label-default'>@reps</span></h4>";
-  var empty = "<div class='page-header'><h1>@title</h1></div><small>@quote</small>"+
-               "<div><button type='button' class='btn btn-xs btn-default' onclick='goback()'>Go back</button></div>";
-  if (currentWorkout === null) {
-    Parse.Cloud.run("startschedule", schedule, {
-      success : function (response) { 
-        reloadCurrentWorkout();
-      },
-
-      error : function (response) {
-        console.log(response);
-      }
-    });
-  } else {
-    startUI();
-  }
-
-  function reloadCurrentWorkout() {
-    Parse.Cloud.run("getcurrentworkout", schedule, {
-      success : function (response) {
-        localStorage.setItem("currentworkout", JSON.stringify(response));
-        startUI();
-      }
-    });
-  }
-
-  function startUI(index) {
-    var c = $(".current");
-    var l = $(".loading");
-    c.fadeOut();
-    l.fadeIn();
-    var i = index | 0;
-    c.empty();
-	if (!currentWorkout || currentWorkout === null)
-		currentWorkout = JSON.parse(localStorage.getItem("currentworkout"));
-    if (currentWorkout.length > 0) {
-      c.append(item.replace("@title", currentWorkout[i].exercise_name)
-                   .replace("@sets", currentWorkout[i].exercise_sets)
-                   .replace("@reps", currentWorkout[i].exercise_reps));
-      c[0].dataset.currentindex = i;
-    } else {
-      c.append(empty.replace("@title", "You are done for now.")
-                    .replace("@quote", "Rest well. See you next time!"));
-      $(".previous").addClass("disabled");
-      $(".next").addClass("disabled");
-      $(".done").addClass("disabled");
-      localStorage.removeItem("currentworkout");
-
-    }
-    
-    l.fadeOut();
-    c.fadeIn();
-  }
-
-  function previous () {
-    var c = $(".current");
-    var l = $(".loading");  
-    c.fadeOut();
-    l.fadeIn();
-    var i = c[0].dataset.currentindex;
-    if (i > 0) 
-      i--;
-    else i = currentWorkout.length-1;
-    startUI(i);
-  }
-
-  function next () {
-    var c = $(".current");
-    var l = $(".loading");  
-    c.fadeOut();
-    l.fadeIn();
-    var i = c[0].dataset.currentindex;
-    if (i < currentWorkout.length-1) 
-      i++;
-    else i = 0;
-    startUI(i);
-  }
-
-  function done () {
-    var c = $(".current");
-    var l = $(".loading");  
-    c.fadeOut();
-    l.fadeIn();
-    var i = c[0].dataset.currentindex;
-    Parse.Cloud.run("doneexercise", currentWorkout[i], {
-      success : function(o) {
-        currentWorkout.splice(i,1);
-        if (i > currentWorkout.length-1)
-          i = currentWorkout.length-1
-        else i = 0;
-        startUI(i);
-      }, 
-
-      error : function (o){
-        console.log(o);
-      }
-    });
-    
-  }
-
-  function goback() {
-    window.location='home.html';
-  }
-  
-  //TODO refactor later...
-  function getUrlParams (url) {
-    if (typeof url == 'undefined') {
-      url = window.location.search
-    }
-    var url = url.split('#')[0] // Discard fragment identifier.
-    var urlParams = {}
-    var queryString = url.split('?')[1]
-    if (!queryString) {
-      if (url.search('=') !== false) {
-        queryString = url
-      }
-    }
-    if (queryString) {
-      var keyValuePairs = queryString.split('&')
-      for (var i = 0; i < keyValuePairs.length; i++) {
-        var keyValuePair = keyValuePairs[i].split('=')
-        var paramName = keyValuePair[0]
-        var paramValue = keyValuePair[1] || ''
-        urlParams[paramName] = decodeURIComponent(paramValue.replace(/\+/g, ' '))
-      }
-    }
-    return urlParams
-  }
-	</script>
-
-  </body>
- </html>
+<head>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<script src=//code.jquery.com/jquery-1.11.2.min.js></script>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js></script>
+<script src=//www.parsecdn.com/js/parse-1.3.2.min.js></script>
+<link href=//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css rel=stylesheet>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel=stylesheet type=text/css>
+<title>Welcome to My Workout</title>
+<style type=text/css>body{font-family:'Open Sans',sans-serif}span{font-family:'Open Sans',sans-serif}.well-lg{margin-top:1em}.button-group{margin-top:1em}.footer{position:absolute;bottom:0;height:60px;text-align:center;background-color:gradient(top,#e8e8e8 0,#f5f5f5 100%)}.form{margin-bottom:1em}.alert{border-color:rgba(250,0,0,0.64)}</style>
+</head>
+<body>
+<div class=container>
+<div class="well well-lg">
+<div class=form>
+<div class=loading>
+<center><span class="fa fa-refresh fa-spin"></span></center>
+</div>
+<div class=current style=display:none>
+</div>
+</div>
+</div>
+<nav>
+<ul class=pager>
+<li class=previous><a href=# onclick=previous()><span aria-hidden=true>&larr;</span> Previous</a></li>
+<li class=done><a href=# onclick=done()><span aria-hidden=true></span> Done </a></li>
+<li class=next><a href=# onclick=next()>Next <span aria-hidden=true>&rarr;</span></a></li>
+</ul>
+</nav>
+</div>
+</div>
+<script type=text/javascript>Parse.initialize("FE9ZFfQcp2tSVznOzsYQAbtFiAXk8x9i4rYVezn3","zCLnaeuwGEaycCCESfXAtqlrNrMAVqbezUxN1kzS");if(!Parse.User.current()){window.location="index.html"}var schedule=new Object();schedule.objectId=getUrlParams()["id"];schedule.userId=Parse.User.current().id;var currentWorkout=JSON.parse(localStorage.getItem("currentworkout"));var item="<div class='page-header'><h1>@title</h1></div><h4>Sets <span class='label label-default'>@sets</span></h4><h4>Reps <span class='label label-default'>@reps</span></h4>";var empty="<div class='page-header'><h1>@title</h1></div><small>@quote</small><div><button type='button' class='btn btn-xs btn-default' onclick='goback()'>Go back</button></div>";if(currentWorkout===null){Parse.Cloud.run("startschedule",schedule,{success:function(a){reloadCurrentWorkout()},error:function(a){console.log(a)}})}else{startUI()}function reloadCurrentWorkout(){Parse.Cloud.run("getcurrentworkout",schedule,{success:function(a){localStorage.setItem("currentworkout",JSON.stringify(a));startUI()}})}function startUI(b){var e=$(".current");var a=$(".loading");e.fadeOut();a.fadeIn();var d=b|0;e.empty();if(!currentWorkout||currentWorkout===null){currentWorkout=JSON.parse(localStorage.getItem("currentworkout"))}if(currentWorkout.length>0){e.append(item.replace("@title",currentWorkout[d].exercise_name).replace("@sets",currentWorkout[d].exercise_sets).replace("@reps",currentWorkout[d].exercise_reps));e[0].dataset.currentindex=d}else{e.append(empty.replace("@title","You are done for now.").replace("@quote","Rest well. See you next time!"));$(".previous").addClass("disabled");$(".next").addClass("disabled");$(".done").addClass("disabled");localStorage.removeItem("currentworkout")}a.fadeOut();e.fadeIn()}function previous(){var d=$(".current");var a=$(".loading");d.fadeOut();a.fadeIn();var b=d[0].dataset.currentindex;if(b>0){b--}else{b=currentWorkout.length-1}startUI(b)}function next(){var d=$(".current");var a=$(".loading");d.fadeOut();a.fadeIn();var b=d[0].dataset.currentindex;if(b<currentWorkout.length-1){b++}else{b=0}startUI(b)}function done(){var d=$(".current");var a=$(".loading");d.fadeOut();a.fadeIn();var b=d[0].dataset.currentindex;Parse.Cloud.run("doneexercise",currentWorkout[b],{success:function(c){currentWorkout.splice(b,1);if(b>currentWorkout.length-1){b=currentWorkout.length-1}else{b=0}startUI(b)},error:function(c){console.log(c)}})}function goback(){window.location="home.html"}function getUrlParams(b){if(typeof b=="undefined"){b=window.location.search}var b=b.split("#")[0];var a={};var h=b.split("?")[1];if(!h){if(b.search("=")!==false){h=b}}if(h){var f=h.split("&");for(var c=0;c<f.length;c++){var g=f[c].split("=");var d=g[0];var e=g[1]||"";a[d]=decodeURIComponent(e.replace(/\+/g," "))}}return a};</script>
+</body>
+</html>

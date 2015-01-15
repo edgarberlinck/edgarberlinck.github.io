@@ -1,200 +1,31 @@
 <!doctype html>
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-    <script src="//www.parsecdn.com/js/parse-1.3.2.min.js"></script>
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <title>Welcome to My Workout</title>
-
-    <style type="text/css">
-      body {
-        font-family: 'Open Sans', sans-serif;
-      }
-
-      span {
-      	font-family: 'Open Sans', sans-serif;
-      }
-
-      .well-lg {
-      	margin-top: 1em;
-      }
-
-      .button-group {
-        margin-top: 1em;
-      }
-
-    .footer {
-		  position: absolute;
-		  bottom: 0;
-		  /* Set the fixed height of the footer here */
-		  height: 60px;
-		  text-align: center;
-		  background-color: gradient(top,#e8e8e8 0,#f5f5f5 100%);
-
-	  }
-
-    .form {
-      margin-bottom: 1em;
-    }
-
-    .alert {
-      border-color: rgba(250, 0, 0, 0.64);
-    }
-    </style>
-  </head>
-  <body>
-  	<div class="container">
-	  	<div class="well well-lg">
-	  	  <div class="page-header">
-	        <center><span class="fa fa-refresh fa-spin"></span></center>
-	      </div>
-        <div class="form">
-          <center><span class="fa fa-refresh fa-spin"></span></center>  
-        </div>
-
-        <button type="button" class="btn btn-default btn-lg" aria-label="Left Align" onclick="goback()">
-          <span>&nbsp;Back</span>
-        </button>
-	  	</div>
-  	</div>
-
-	 <script type="text/javascript">
-    Parse.initialize("FE9ZFfQcp2tSVznOzsYQAbtFiAXk8x9i4rYVezn3", "zCLnaeuwGEaycCCESfXAtqlrNrMAVqbezUxN1kzS");
-    
-    var header = "<h1> @title </h1> <small> from @begin to @end &nbsp;<span class='label label-@status'>@status_label</span></small>";
-    var no_series_found = "<h4> Now you need to put some exercises on your workout program. Click on button below to start. </h4>";
-    var serie_table = "<div class='list-group'> @rows </div>";
-    var serie = "<a href='#'' class='list-group-item'> "+
-                "  <h4 class='list-group-item-heading'>@title </h4>"+
-                "  <p class='list-group-item-text'>  "+
-                "  Sets: <span class='label label-default'> @sets </span>"+
-                "  Reps: <span class='label label-default'> @reps </span>"+
-                "  <div style='margin-top: 1em'>"+
-                "    <button type='button' data-objectid='@objectId' class='btn btn-xs btn-default' onclick='deleteExercise(this.dataset.objectid)'>Delete</button> </h4> "+
-                "  </div>"+
-                "  </p> "+
-                "</a> ";
-                
-    var addbutton = "<button class='btn btn-lg btn-default fa fa-plus' onclick='addexercise()' />";
-
-    var schedule = undefined;
-    if (localStorage.getItem("schedule"))
-      schedule = JSON.parse(localStorage.getItem("schedule"));
-
-    if (!schedule) {
-      schedule = new Object();
-      //TODO retirar esse parâmetro da url e usar o localstorage.
-      schedule.objectId = getUrlParams()["id"];
-    }
-    schedule.userId = Parse.User.current().id; 
-    //TODO melhorar isso depois.. Dar uma olhada em Promises.
-    if (!schedule.parsedata) {
-      Parse.Cloud.run("getschedule", schedule, {
-        success : function (response) {
-          var parsedata = new Object();
-          parsedata.schedule_name = response.get("schedule_name");
-          parsedata.schedule_date_begin = response.get("schedule_date_begin");
-          parsedata.schedule_date_end = response.get("schedule_date_end");
-          parsedata.schedule_is_active = response.get("schedule_is_active");
-          parsedata.schedule_exercises = response.get("schedule_exercises");
-
-          schedule.parsedata = parsedata;
-
-          fill();
-        },
-
-        error : function (response) {
-          console.log(response);
-        }
-     });
-   } else {
-      fill();
-   }
-
-   function fill() {
-     $(".page-header").empty();
-     $(".page-header").append(header.replace("@title", schedule.parsedata.schedule_name)
-                                    .replace("@begin", schedule.parsedata.schedule_date_begin)
-                                    .replace("@end", schedule.parsedata.schedule_date_end)
-                                    .replace("@status", Boolean(schedule.parsedata.schedule_is_active) ? "primary" : "success" )
-                                    .replace("@status_label", Boolean(schedule.parsedata.schedule_is_active) ? "In progress" : "Done"));
-      var exercises = "";
-      if (schedule.parsedata.schedule_exercises.length > 0) {
-        $(schedule.parsedata.schedule_exercises).each(function(i,e){
-          exercises += serie.replace("@title", e.exercise_name)
-                            .replace("@sets", e.exercise_sets)
-                            .replace("@reps", e.exercise_reps)
-                            .replace(/@objectid/g, i );
-        });
-
-        exercises = serie_table.replace("@rows", exercises);
-      } else {
-        exercises += no_series_found;
-      }
-
-      $(".form").empty();
-      $(".form").append(exercises);
-      $(".form").append(addbutton);
-
-      localStorage.setItem('schedule', JSON.stringify(schedule));
-    }
-
-   function goback() {
-      window.location = "home.html";
-   }
-
-   function deleteExercise (exercise) {
-     schedule.parsedata.schedule_exercises.splice(exercise, 1);
-     Parse.Cloud.run("updateschedule", schedule);
-     fill();
-   }
-
-   function validate() {
-      $('.required').removeClass("alert");
-      var empty = $('.required').filter(function() { return $(this).val() == ""; });
-      if (empty.length > 0) {
-        empty.each(function(index, element){
-          $(element).addClass("alert");
-        });
-        return false;
-      }
-      return true;
-   }
-
-   function addexercise() { 
-     window.location = "exercise.html";
-   }
-   
-   //TODO refactor later...
-   function getUrlParams (url) {
-      if (typeof url == 'undefined') {
-          url = window.location.search
-      }
-      var url = url.split('#')[0] // Discard fragment identifier.
-      var urlParams = {}
-      var queryString = url.split('?')[1]
-      if (!queryString) {
-          if (url.search('=') !== false) {
-              queryString = url
-          }
-      }
-      if (queryString) {
-          var keyValuePairs = queryString.split('&')
-          for (var i = 0; i < keyValuePairs.length; i++) {
-              var keyValuePair = keyValuePairs[i].split('=')
-              var paramName = keyValuePair[0]
-              var paramValue = keyValuePair[1] || ''
-              urlParams[paramName] = decodeURIComponent(paramValue.replace(/\+/g, ' '))
-          }
-      }
-      return urlParams
-    }
-	 </script>
-
-  </body>
- </html>
+<head>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<script src=//code.jquery.com/jquery-1.11.2.min.js></script>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js></script>
+<script src=//www.parsecdn.com/js/parse-1.3.2.min.js></script>
+<link href=//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css rel=stylesheet>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel=stylesheet type=text/css>
+<title>Welcome to My Workout</title>
+<style type=text/css>body{font-family:'Open Sans',sans-serif}span{font-family:'Open Sans',sans-serif}.well-lg{margin-top:1em}.button-group{margin-top:1em}.footer{position:absolute;bottom:0;height:60px;text-align:center;background-color:gradient(top,#e8e8e8 0,#f5f5f5 100%)}.form{margin-bottom:1em}.alert{border-color:rgba(250,0,0,0.64)}</style>
+</head>
+<body>
+<div class=container>
+<div class="well well-lg">
+<div class=page-header>
+<center><span class="fa fa-refresh fa-spin"></span></center>
+</div>
+<div class=form>
+<center><span class="fa fa-refresh fa-spin"></span></center>
+</div>
+<button type=button class="btn btn-default btn-lg" aria-label="Left Align" onclick=goback()>
+<span>&nbsp;Back</span>
+</button>
+</div>
+</div>
+<script type=text/javascript>Parse.initialize("FE9ZFfQcp2tSVznOzsYQAbtFiAXk8x9i4rYVezn3","zCLnaeuwGEaycCCESfXAtqlrNrMAVqbezUxN1kzS");if(!Parse.User.current()){window.location="index.html"}var header="<h1> @title </h1> <small> from @begin to @end &nbsp;<span class='label label-@status'>@status_label</span></small>";var no_series_found="<h4> Now you need to put some exercises on your workout program. Click on button below to start. </h4>";var serie_table="<div class='list-group'> @rows </div>";var serie="<a href='#'' class='list-group-item'>   <h4 class='list-group-item-heading'>@title </h4>  <p class='list-group-item-text'>    Sets: <span class='label label-default'> @sets </span>  Reps: <span class='label label-default'> @reps </span>  <div style='margin-top: 1em'>    <button type='button' data-objectid='@objectId' class='btn btn-xs btn-default' onclick='deleteExercise(this.dataset.objectid)'>Delete</button> </h4>   </div>  </p> </a> ";var addbutton="<button class='btn btn-lg btn-default fa fa-plus' onclick='addexercise()' />";var schedule=undefined;if(localStorage.getItem("schedule")){schedule=JSON.parse(localStorage.getItem("schedule"))}if(!schedule){schedule=new Object();schedule.objectId=getUrlParams()["id"]}schedule.userId=Parse.User.current().id;if(!schedule.parsedata){Parse.Cloud.run("getschedule",schedule,{success:function(a){var b=new Object();b.schedule_name=a.get("schedule_name");b.schedule_date_begin=a.get("schedule_date_begin");b.schedule_date_end=a.get("schedule_date_end");b.schedule_is_active=a.get("schedule_is_active");b.schedule_exercises=a.get("schedule_exercises");schedule.parsedata=b;fill()},error:function(a){console.log(a)}})}else{fill()}function fill(){$(".page-header").empty();$(".page-header").append(header.replace("@title",schedule.parsedata.schedule_name).replace("@begin",schedule.parsedata.schedule_date_begin).replace("@end",schedule.parsedata.schedule_date_end).replace("@status",Boolean(schedule.parsedata.schedule_is_active)?"primary":"success").replace("@status_label",Boolean(schedule.parsedata.schedule_is_active)?"In progress":"Done"));var a="";if(schedule.parsedata.schedule_exercises.length>0){$(schedule.parsedata.schedule_exercises).each(function(b,c){a+=serie.replace("@title",c.exercise_name).replace("@sets",c.exercise_sets).replace("@reps",c.exercise_reps).replace(/@objectid/g,b)});a=serie_table.replace("@rows",a)}else{a+=no_series_found}$(".form").empty();$(".form").append(a);$(".form").append(addbutton);localStorage.setItem("schedule",JSON.stringify(schedule))}function goback(){window.location="home.html"}function deleteExercise(a){schedule.parsedata.schedule_exercises.splice(a,1);Parse.Cloud.run("updateschedule",schedule);fill()}function validate(){$(".required").removeClass("alert");var a=$(".required").filter(function(){return $(this).val()==""});if(a.length>0){a.each(function(b,c){$(c).addClass("alert")});return false}return true}function addexercise(){window.location="exercise.html"}function getUrlParams(b){if(typeof b=="undefined"){b=window.location.search}var b=b.split("#")[0];var a={};var h=b.split("?")[1];if(!h){if(b.search("=")!==false){h=b}}if(h){var f=h.split("&");for(var c=0;c<f.length;c++){var g=f[c].split("=");var d=g[0];var e=g[1]||"";a[d]=decodeURIComponent(e.replace(/\+/g," "))}}return a};</script>
+</body>
+</html>

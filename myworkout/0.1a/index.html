@@ -1,111 +1,51 @@
 <!doctype html>
 <html>
-  <head>
-	  <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-    <script src="//www.parsecdn.com/js/parse-1.3.2.min.js"></script>
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <title>Welcome to My Workout</title>
-
-    <style type="text/css">
-      body {
-        font-family: 'Open Sans', sans-serif;
-      }
-
-      span {
-      	font-family: 'Open Sans', sans-serif;
-      }
-
-      .well-lg {
-      	margin-top: 1em;
-      }
-
-      .btn-facebook {
-
-      }
-
-      .button-group {
-        margin-top: 1em;
-      }
-
-      .footer {
-		  position: absolute;
-		  bottom: 0;
-		  /* Set the fixed height of the footer here */
-		  height: 60px;
-		  text-align: center;
-		  background-color: gradient(top,#e8e8e8 0,#f5f5f5 100%);
-
-	  }
-    </style>
-
-  </head>
-  <body>
-  	<div class="container">
-	  	<div class="well well-lg">
-	  	  <div class="page-header">
-	        <h1>Welcome to My Workout.</h1>
-	        <small>Please, login or register to getiing started</small>
-	      </div>
-	      <h3>Username</h3>
-	      <div class="input-group">
-	        <span class="input-group-addon" id="username"><span class="fa fa-user"></span></span>
-	        <input id="iusername" type="text" class="form-control" placeholder="Username" aria-describedby="username">
-	      </div>
-	      <h3>Password</h3>
-	      <div class="input-group">
-	        <span class="input-group-addon" id="password"><span class="fa fa-key"></span></span>
-	        <input id="ipassword" type="password" class="form-control" placeholder="password" aria-describedby="password">
-	      </div>
-
-	      <div class="button-group">
-		      <button type="button" class="btn btn-lg" aria-label="Laft Align" onclick="logIn()">
-		  	    <span>&nbsp;Login</span>
-		  	  </button>
-
-		  	  <button type="button" class="btn btn-lg" aria-label="Laft Align" onclick="window.location='register.html'">
-		  	    <span>&nbsp;Register</span>
-		  	  </button>
-	  	  </div>
-	  	</div>
-  	</div>
-
-  	<div class="container social-media" style="display=none">
-	  	<div class="social">
- 		<button type="button" class="btn btn-primary btn-facebook" aria-label="Left Align" onclick="alert('Em breve...')">
-  		  <span class="fa fa-facebook">&nbsp;Connect using Facebook</span>
-		</button>
-	  	</div>
-	 <div>
-  </body>
-
-  <script type="text/javascript">
-  	Parse.initialize("FE9ZFfQcp2tSVznOzsYQAbtFiAXk8x9i4rYVezn3", "zCLnaeuwGEaycCCESfXAtqlrNrMAVqbezUxN1kzS");
-  	var currentUser = Parse.User.current();
-  	if (currentUser)
-  		window.location = "home.html";
-
-  	function logIn() {
-  		var username = document.getElementById("iusername").value;
-  		var password = document.getElementById("ipassword").value;
-
-  		Parse.User.logIn(username, password, {
-  			success: function (response) {
-				window.location = "home.html";  				
-  			},
-
-  			error: function (response) {
-  				alert("Invalid username / password");
-  			}
-  		})
-  	}
-
-  </script>
-
- </html>
-
-
+<head>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<script src=//code.jquery.com/jquery-1.11.2.min.js></script>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js></script>
+<script src=//www.parsecdn.com/js/parse-1.3.2.min.js></script>
+<link href=//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css rel=stylesheet>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel=stylesheet type=text/css>
+<title>Welcome to My Workout</title>
+<style type=text/css>body{font-family:'Open Sans',sans-serif}span{font-family:'Open Sans',sans-serif}.well-lg{margin-top:1em}.button-group{margin-top:1em}.footer{position:absolute;bottom:0;height:60px;text-align:center;background-color:gradient(top,#e8e8e8 0,#f5f5f5 100%)}</style>
+</head>
+<body>
+<div class=container>
+<div class="well well-lg">
+<div class=page-header>
+<h1>Welcome to My Workout.</h1>
+<small>Please, login or register to getiing started</small>
+</div>
+<h3>Username</h3>
+<div class=input-group>
+<span class=input-group-addon id=username><span class="fa fa-user"></span></span>
+<input id=iusername type=text class=form-control placeholder=Username aria-describedby=username>
+</div>
+<h3>Password</h3>
+<div class=input-group>
+<span class=input-group-addon id=password><span class="fa fa-key"></span></span>
+<input id=ipassword type=password class=form-control placeholder=password aria-describedby=password>
+</div>
+<div class=button-group>
+<button type=button class="btn btn-lg" aria-label="Laft Align" onclick=logIn()>
+<span>&nbsp;Login</span>
+</button>
+<button type=button class="btn btn-lg" aria-label="Laft Align" onclick="window.location='register.html'">
+<span>&nbsp;Register</span>
+</button>
+</div>
+</div>
+</div>
+<div class="container social-media" style="display=none">
+<div class=social>
+<button type=button class="btn btn-primary btn-facebook" aria-label="Left Align" onclick="alert('Em breve...')">
+<span class="fa fa-facebook">&nbsp;Connect using Facebook</span>
+</button>
+</div>
+<div>
+</body>
+<script type=text/javascript>Parse.initialize("FE9ZFfQcp2tSVznOzsYQAbtFiAXk8x9i4rYVezn3","zCLnaeuwGEaycCCESfXAtqlrNrMAVqbezUxN1kzS");var currentUser=Parse.User.current();if(currentUser){window.location="home.html"}function logIn(){var c=document.getElementById("iusername").value;var d=document.getElementById("ipassword").value;Parse.User.logIn(c,d,{success:function(a){window.location="home.html"},error:function(a){alert("Invalid username / password")}})};</script>
+</html>

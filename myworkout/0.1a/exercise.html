@@ -102,7 +102,8 @@
 
 	 <script type="text/javascript">
     Parse.initialize("FE9ZFfQcp2tSVznOzsYQAbtFiAXk8x9i4rYVezn3", "zCLnaeuwGEaycCCESfXAtqlrNrMAVqbezUxN1kzS");
-
+    if (!Parse.User.current())
+      window.location = "index.html";
     var header = "<h1> @title </h1> <small> @operation</small>";
     var no_series_found = "<h4> Now you need to put some exercises on your workout program. Click on button below to start. </h4>";
     var schedule = JSON.parse(localStorage.getItem("schedule"));
