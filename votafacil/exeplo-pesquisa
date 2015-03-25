@@ -1,0 +1,13 @@
+var query = new Parse.Query(Parse.Object.extend("Pesquisa"));
+
+query.get("NLgxpV9WKu", {
+  success : function (data) {
+    var q = new Parse.Query(Parse.Object.extend("Opcao"));
+    q.equalTo("pesquisa", data);
+    q.find({ 
+      success : function (r) {
+       console.log(r);
+      } 
+    }
+  })
+});
