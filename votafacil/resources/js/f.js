@@ -142,6 +142,7 @@ function iniciarVotacao() {
                                                 if (!jahVotou) {
                                                     queryOpcoes = new Parse.Query(Parse.Object.extend("Opcao"));
                                                     queryOpcoes.equalTo("parent", e);
+                                                    queryOpcoes.ascending("numero");
                                                     queryOpcoes.find({
                                                         success : function (opcoes) {
                                                             _ += "<div class='container-fluid'>";
