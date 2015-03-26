@@ -148,16 +148,8 @@ function iniciarVotacao() {
                                                             _ += "<div class='container-fluid'>";
                                                             _ += "<h1>"+e.get("titulo")+"</h1>";
                                                             _ += "<h3>"+e.get("pergunta")+"</h3>";
-                                                            var c = 0;
                                                             _ += "<div class='row-same-height'>";
                                                             $(opcoes).each(function(i, e) {
-                                                                if (c === 3) {
-                                                                    _ += "</div>";
-                                                                    _ += "<div class='row-same-height'>";
-                                                                    c = 0;
-                                                                } else {
-                                                                    c++;
-                                                                }
                                                                 _ += "<div class='col-sm-6 col-md-4 col-full-height' data-value='"+e.id+"' onclick='focusControl(this)'>";
                                                                 _ += "<div class='thumbnail'>";
                                                                 if (e.get("arquivo")) 
