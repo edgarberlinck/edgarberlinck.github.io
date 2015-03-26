@@ -13,12 +13,12 @@ var printOpc = "<div class='row'>"+
         "</div>";
 
 var newOpc = "<div class='row'>"+
-             "<div class='col-sm-6 col-md-4'>"+ 
+             "<div>"+ 
                "<div class='thumbnail'>"+
                "<h3> Digite um texto para a opção </h3>"+
                "<div class='input-group'>"+
                "<span class='input-group-addon' id='textoOpcao'><span class='fa fa-check-circle'></span></span>"+
-               "<input id='itextoOpcao' type='text' value='@OPC_TEXT' class='form-control' placeholder='Digite um texto para a opção (Opcional)' aria-describedby='textoOpcao'>"+
+               "<input id='itextoOpcao' type='text' value='@OPC_TEXT' class='form-control' placeholder='Digite um texto para a opção (opcional)' aria-describedby='textoOpcao'>"+
                '</div>'+
                  "<div class='caption'>"+
                    "<h3> Inclua uma imagem </h3>"+
@@ -30,7 +30,7 @@ var newOpc = "<div class='row'>"+
                     "<br>"+
                     "<p>"+
                         "<button onclick='salvarOpcao(@UPDATE_INDEX)' class='btn btn-block btn-primary'>Salvar</button>"+
-                        "<button onclick='listarOpcoes()' class='btn btn-block btn-default'>Cancelar</button>"+
+                        "<button onclick='listarOpcoes()' class='btn btn-block btn-danger'>Cancelar</button>"+
                     "</p>"+
                  "</div>"+
                "</div>"+
@@ -49,7 +49,7 @@ function home() {
 
 function admin() {
     goTo("pages/authadmin.html", function () {
-        setTitle("Bem vindo ao vota-fácil", "Informe suas credenciais para se autenticar no sistema")
+        setTitle("Bem vindo ao vote-fácil", "Informe suas credenciais para autenticar no sistema")
     });
 }
 
@@ -63,7 +63,7 @@ function homeAdmin() {
             });
             
         })
-        setTitle("Vota-Fácil", "Escolha uma das opções abaixo.");
+        setTitle("Vote-Fácil", "");
     });
 }
 
@@ -144,24 +144,39 @@ function iniciarVotacao() {
                                                     queryOpcoes.equalTo("parent", e);
                                                     queryOpcoes.find({
                                                         success : function (opcoes) {
-                                                            _ += "<div class='page-header'>";
+                                                            _ += "<div class='container-fluid'>";
                                                             _ += "<h1>"+e.get("titulo")+"</h1>";
                                                             _ += "<h3>"+e.get("pergunta")+"</h3>";
+                                                            var c = 0;
+                                                            _ += "<div class='row-same-height'>";
                                                             $(opcoes).each(function(i, e) {
-                                                                _ += "<div class='col-xs-6 col-md-4 item-votacao'><button data-value='"+e.id+"' class='btn btn-block btn-default' onclick='focusControl(this)'>";
+                                                                if (c === 3) {
+                                                                    _ += "</div>";
+                                                                    _ += "<div class='row-same-height'>";
+                                                                    c = 0;
+                                                                } else {
+                                                                    c++;
+                                                                }
+                                                                _ += "<div class='col-sm-6 col-md-4 col-full-height' data-value='"+e.id+"' onclick='focusControl(this)'>";
+                                                                _ += "<div class='thumbnail'>";
                                                                 if (e.get("arquivo")) 
                                                                     _ += "<img src='"+e.get("arquivo").url()+"' class='img-rounded' /></br>";
-                                                                if (e.get("textoOpcao"))
+                                                                if (e.get("textoOpcao")) {
+                                                                    _ += "<div class='caption'>";
                                                                     _ += "<h3>"+e.get("textoOpcao")+"</h3>";
-                                                                _ += "</button>";
+                                                                    _ += "</div>";
+                                                                }
+
                                                                 _ += "</div>";
+                                                                _ += "</div>"; 
                                                             });
+                                                            _ += "</div>";
                                                             _ += "</div>";
                                                             pergunta.innerHTML = _;
                                                         }
                                                     })    
                                                 } else {
-                                                    pergunta.innerHTML = "<h1>Nenhuma pesquisa está disponvel no momento</h1>";
+                                                    pergunta.innerHTML = "<h1>Voto já computado</h1>";
                                                     $(".btn-success").addClass("disabled"); 
                                                 } 
                                             }
@@ -171,14 +186,14 @@ function iniciarVotacao() {
                                     });   
                                 });
                             } else {
-                                pergunta.innerHTML = "<h1>Nenhuma pesquisa está disponvel no momento</h1>";
+                                pergunta.innerHTML = "<h1>Nenhuma pesquisa disponível no momento</h1>";
                                 $(".btn-success").addClass("disabled");
                             }
                         }
                     });
                 });
             } else {
-                alert("Matricula não localizada. Entre em contato com o suporte.");
+                alert("Matricula não cadastrada");
             }
         }
      });
@@ -187,7 +202,7 @@ function iniciarVotacao() {
 function focusControl(element) {
     $("button.btn-primary").removeClass("btn-primary");
     $(element).addClass("btn-primary");
-    if (confirm("Deseja confirmar seu voto?")) {
+    if (confirm("Confirma seu voto?")) {
         registrarVoto();
     }
 }
@@ -206,7 +221,7 @@ function registrarVoto() {
                         var votos = participante.relation("votos");
                         votos.add(opcao);
                         participante.save().then(function (){
-                            alert("Voto computado. Obrigado!");
+                            alert("Voto computado");
                             home();
                         });
                     }
@@ -214,7 +229,7 @@ function registrarVoto() {
             }
         })
     } else {
-        alert("Você deve selecionar uma opção.");
+        alert("Você deve selecionar uma opção");
     }
 
 }
@@ -231,6 +246,7 @@ function obterParticipanteAtivo() {
     if (pesquisa) {
         var query = new Parse.Query(Parse.Object.extend("Opcao"));
         query.equalTo("parent", pesquisa);
+        query.ascending("numero");
         query.find({
             success : function (opc) {
                 __opcoes = opc;
@@ -256,7 +272,7 @@ function obterParticipanteAtivo() {
 
  function goVisualizarPesquisas() {
     goTo("pages/viewpesquisas.html", function() { 
-        setTitle("Todas as Pesquisas", "Você pode visualizar todas as pesquisas, ordenadas por data de criação");
+        setTitle("Todas as Pesquisas", "Você pode visualizar todas as pesquisas, ordenadas pela data de criação");
         
         startParse();
         var query = new Parse.Query(Parse.Object.extend("Pesquisa"));
@@ -268,9 +284,14 @@ function obterParticipanteAtivo() {
     });
  }
  
- function goCadastrarParticipante() {
+ function goCadastrarParticipante(participante) {
     goTo("pages/cadparticipante.html", function(){
-        setTitle("Cadastrar Participante", "Informe a matricula e o nome do participante");
+        setTitle("Cadastrar Participante", "Informe a matrícula e o nome do participante");
+        if (participante) {
+           document.getElementById('participanteId').value = participante.id;
+           document.getElementById('inome').value = participante.get("nome");
+           document.getElementById('imatricula').value = participante.get('matricula');
+        }
     }); 
  }
 
@@ -283,15 +304,33 @@ function obterParticipanteAtivo() {
      query.find({
         success : function (list) {
             var table = "<table class='table table-striped'>";
-            table += "<thead><td>Matricula</td><td>Nome</nome></thead>";
+            table += "<thead><td>Matricula</td><td>Nome</td><td></td></thead>";
             $(list).each( function(i, e) {
-                table += "<tr><td>"+e.get("matricula")+"</td><td>"+e.get("nome")+"</nome></tr>"
+                table += "<tr><td>"+e.get("matricula")+"</td><td>"+e.get("nome")+
+                "</td><td>"+
+                "<button class='btn btn-default fa fa-edit' data-id='"+e.id+"' data-toggle='tooltip' title='Alterar Participante' onclick='alterarParticipante(this.dataset.id)'></button>"+
+                "<button class='btn btn-default fa fa-trash' data-id='"+e.id+"' data-toggle='tooltip' title='Excluir Participante' onclick='excluirParticipante(this.dataset.id)'></button>"+
+                "</td></tr>";
             });
             table += "</table>";
             listaParticipantes.innerHTML = table;
         }
      });
    });
+ }
+
+ function excluirParticipante(id) {
+    if (confirm("Confirma e Exclusão?")) {
+        var q = new Parse.Query(Parse.Object.extend("Participante"));
+        q.get(id).then(function (participante) {
+            participante.destroy().then(goListarParticipantes);
+        });
+    }
+ }
+ 
+ function alterarParticipante(id) {
+    var q = new Parse.Query(Parse.Object.extend("Participante"));
+    q.get(id).then(goCadastrarParticipante);
  }
 
  function goGerarRelatorioPercentualVotacao() {
@@ -393,7 +432,7 @@ function obterParticipanteAtivo() {
     if (arquivo.files.length > 0) {
       var file = arquivo.files[0];
       var name = randonName();
-     
+      
       var parseFile = new Parse.File(name, file);
     }
     
@@ -408,10 +447,13 @@ function obterParticipanteAtivo() {
         opcao.set("arquivo", parseFile);
     }
     
-    if (index !== undefined)
+    if (index !== undefined) {
         __opcoes[index] = opcao;
-    else
+        opcao.set("numero", index);
+    } else {
         __opcoes.push(opcao);
+        opcao.set("numero", __opcoes.length);
+    }
 
     listarOpcoes();
  }
@@ -429,7 +471,7 @@ function excluirOpcao(cod) {
     document.getElementById("newopc").innerHTML = ""; 
     var _ = "";
     $(__opcoes).each(function (i, e) {
-        _ += printOpc.replace("@OPC_IMAGE", e.get("arquivo") ? "<img src='"+e.get("arquivo").url()+"' alt='A imagem será carregada assim que a pesquisa for salva.'>" : "")
+        _ += printOpc.replace("@OPC_IMAGE", e.get("arquivo") ? "<img src='"+e.get("arquivo").url()+"' alt='A imagem será carregada assim que a pesquisa for salva." : "")
                      .replace("@OPC_TEXT", e.get("textoOpcao") ? e.get("textoOpcao") : "")
                      .replace("@OPC_COD", __opcoes.indexOf(e))
                      .replace("@OPC_COD", __opcoes.indexOf(e));
@@ -483,10 +525,10 @@ function listarPesquisas(pesquisas) {
                 "<div class='container-inline'>@OPC</div>"+
                 "</div>";
     
-    var view = "<button class='btn' data-id='@COD_PESQUISA' onclick='verPesquisa(this)'> <span class='fa fa-info'></span></button>";
-    var edit = "<button class='btn' data-id='@COD_PESQUISA' onclick='alterarPesquisa(this)'> <span class='fa fa-edit'></span></button>";
-    var ativar = "<button class='btn btn-primary' data-id='@COD_PESQUISA' onclick='ativarPesquisa(this)'> <span class=\'fa fa-bell\'> </span></button>";
-    var desativar = "<button class='btn btn-danger' data-id='@COD_PESQUISA' onclick='desativarPesquisa(this)'> <span class='fa fa-bell-slash'></span></button>";
+    var view = "<button data-toggle='tooltip' title='Visualizar Pesquisa' class='btn' data-id='@COD_PESQUISA' onclick='verPesquisa(this)'> <span class='fa fa-info'></span></button>";
+    var edit = "<button data-toggle='tooltip' title='Alterar Pesquisa' class='btn' data-id='@COD_PESQUISA' onclick='alterarPesquisa(this)'> <span class='fa fa-edit'></span></button>";
+    var ativar = "<button data-toggle='tooltip' title='Ativar Pesquisa' class='btn btn-primary' data-id='@COD_PESQUISA' onclick='ativarPesquisa(this)'> <span class=\'fa fa-bell\'> </span></button>";
+    var desativar = "<button data-toggle='tooltip' title='Desativar Pesquisa' class='btn btn-danger' data-id='@COD_PESQUISA' onclick='desativarPesquisa(this)'> <span class='fa fa-bell-slash'></span></button>";
     
     var opc;
 
@@ -504,8 +546,8 @@ function listarPesquisas(pesquisas) {
         }
     });
 
-    $(".pesquisa-ativa").html(pesquisasAtivas !== "" ? pesquisasAtivas : "Nenhuma pesquisa está ativa no momento.");
-    $(".pesquisas").html(pesquisasInativas !== "" ? pesquisasInativas : "Nenhuma Pesquisa encontrada.");
+    $(".pesquisa-ativa").html(pesquisasAtivas !== "" ? pesquisasAtivas : "Nenhuma pesquisa ativa no momento.");
+    $(".pesquisas").html(pesquisasInativas !== "" ? pesquisasInativas : "Nenhuma pesquisa encontrada.");
 }
 
  function verPesquisa(element) {
@@ -586,22 +628,31 @@ function listarPesquisas(pesquisas) {
  function salvarParticipante() {
     var matricula = document.getElementById("imatricula").value;
     var nome = document.getElementById("inome").value;
+    var id = document.getElementById("participanteId").value;
 
     var Participante = Parse.Object.extend("Participante");
     var participante = new Participante();
-
+    if (id) {
+        participante.set("objectId", id);
+    }
     participante.set("matricula", matricula);
     participante.set("nome", nome);
     participante.set("ativo", true);
 
-    participante.save().then(homeAdmin);
+    participante.save().then(function (participante){
+        if (id.trim() !== "") {
+            goListarParticipantes();
+            return
+        }
+        goCadastrarParticipante();
+    }); 
  }
 
 //////////////////////
 
 function randonName() {
-    //TODO criar um nome único.
-    return "arquivo.png";
+    //TODO criar um nome único. Náo tem muita importäncia, apenas por caprixo mesmo
+    return "imagem";
 }
 
 function goTo(page, complete) {
@@ -621,6 +672,7 @@ function goTo(page, complete) {
                 $(".logoff").fadeOut();
             }
             
+            $("[data-toggle='tooltip']").tooltip();
             loading.hide();
             return retorno;
         }
@@ -631,7 +683,8 @@ function goTo(page, complete) {
 
 function setTitle(title, subtitle) {
     $(".page-title").html(title);
-    $(".page-subtitle").html(subtitle);
+    if (subtitle)
+        $(".page-subtitle").html(subtitle);
 }
 
 function startParse() {
