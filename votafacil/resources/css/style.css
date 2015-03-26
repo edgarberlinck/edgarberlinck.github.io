@@ -13,3 +13,13 @@ span {
   margin-top: 1em;
   position: botton;
 }
+
+.item-votacao {
+  /* margin-top: 0em; */
+  margin-bottom: 2em;
+}
+
+.botao-votacao {
+	margin-top: 15em;
+	margin-bottom: 3em;
+}
