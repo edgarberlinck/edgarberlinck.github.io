@@ -683,32 +683,3 @@ function setTitle(title, subtitle) {
 function startParse() {
     Parse.initialize("c0ppHCN9En9JFhExK7H7HaYZeRNNOGnHCjCvTnyE", "PQrtHfb683zjR9pSHHwzeyWO34uT3mFZqpPQHeAK");
 }
-
-
-window.manipulationTarget = null;
-
-window.onmanipulationdelta = function () {
-    if (!window.manipulationTarget) {
-        return '';
-    }
-
-    var target = window.manipulationTarget;
-
-    var top = target.scrollTop == 0;
-    var bottom = target.scrollTop + target.clientHeight == target.scrollHeight;
-
-    return top ? bottom ? 'both' : 'top': bottom ? 'bottom' : '';
-};
-
-window.onmanipulationcompleted = function () {
-    window.manipulationTarget = null;
-};
-
-// and you'll need to make calls to every elements
-// with overflow auto or scroll with this:
-function preventBouncing(ele) {
-    // using jQuery.
-    ele.on('MSPointerDown pointerdown', function (e) {
-        window.manipulationTarget = this;
-    });
-}
