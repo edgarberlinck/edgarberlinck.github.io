@@ -7,7 +7,7 @@
 	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
 
@@ -16,6 +16,9 @@
 
 	<script src="//www.parsecdn.com/js/parse-1.3.2.min.js"></script>
 
+	<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Overlock:400,700' rel='stylesheet' type='text/css'>
 	<title>Bem Vindo ao Nofifly.</title>
 </head>
 
@@ -23,16 +26,43 @@
 	<div class="container">	
 		<div class="jumbotron">
 		  <h1>Bem vindo ao Notifly</h1>
-		  <p>Nós procuramos passagens para você</p>
-		  <p><a class="btn btn-primary btn-lg" href="#" role="button">Como Funicona?</a></p>
+		  <p class="slogan">Nós procuramos passagens para você</p>
+		  <p>
+		  <a class="btn btn-primary btn-lg btn-title" href="#" role="button">Como Funicona?</a>
+		  <a class="btn btn-primary btn-lg btn-title" onclick="goTo('notifly/register.html')" role="button">Registre-se</a></p>
+		</div>
+	</div>
+
+	<div class="container">
+		<div id="messages" class="alert alert-danger hide" role="alert">
+		<span class="fa fa-warning">Você não nos forneceu dados suficientes... Tem dúvidas? Acesse a ajuda.</span>
 		</div>
 	</div>
 
 	<div id="content" class="container">
-
+		<center><span class="fa fa-refresh fa-spin"></span></center>
 	</div>
 </body>
 	
 <script type="text/javascript" src="notifly/notifly.js"></script>
+<style type="text/css">
+	
+.pull-right {
+  border-left: 1px solid #D3D3D3;
+  padding-left: 15px;
+}
 
+h1 {
+	font-family: 'Lobster', cursive;
+}
+
+body {
+	font-family: 'Overlock', cursive;
+}
+
+.slogan {
+	font-family: 'Pacifico', cursive;
+}
+
+</style>
 </html>
