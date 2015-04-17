@@ -137,11 +137,6 @@ function registrar() {
 }
 
 function logar(user) {
-	messages.classList.add("alert-danger");
-	messages.classList.remove("alert-success");
-	messages.classList.add("hide");
-	messages.classList.remove("show");
-
 	var username;
 	var password;
 
@@ -202,8 +197,11 @@ function salvar(search) {
 }
 
 function goTo(page, complete) {
-    var loading = $(".loading");
-    loading.show();
+    messages.classList.add("alert-danger");
+	messages.classList.remove("alert-success");
+	messages.classList.add("hide");
+	messages.classList.remove("show");
+
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState === 4 && this.status === 200) {
@@ -260,4 +258,54 @@ function configureQuery() {
 
   	
   };
+
+  function help() {
+  	goTo("notifly/ajuda.html");
+  }
+
+  function contato(){
+  	goTo("notifly/contato.html");	
+  }
+
+  function enviarContato() {
+  	messages.classList.add("hide");
+	messages.classList.remove("show");
+	$(".form-group").removeClass("has-error");
+
+  	var nomeContato = document.getElementById("nomeContato");
+  	var email = document.getElementById("emailContato");
+  	var mensagem = document.getElementById("mensagem");
+  	var hasError = false;
+
+  	if (nomeContato.value === "") {
+  		hasError = true;
+  		nomeContato.parentNode.classList.add("has-error");
+  	}
+
+  	if (email.value===""){
+  		hasError = true;
+  		email.parentNode.classList.add("has-error");
+  	}
+
+  	if(mensagem.value===""){
+  		hasError = true;
+  		mensagem.parentNode.classList.add("has-error");
+  	}
+
+  	if (!hasError) {
+  		var Contato = Parse.Object.extend("contato");
+  		var contato = new Contato();
+  		contato.set("nome", nomeContato.value);
+  		contato.set("email", emailContato.value);
+  		contato.set("mensagem", mensagem.value);
+  		contato.save().then(function(){
+  			home("Sua mensagem foi enviado. Responderemos assim que possível!");
+  		})
+  	} else {
+  		messages.children[0].innerHTML = "Por favor, preencha todos os campos!"
+		messages.classList.remove("hide");
+		messages.classList.add("show");
+  	}
+  }
+
 home();
