@@ -1,68 +1,59 @@
 <!doctype html>
 <html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="http://necolas.github.io/normalize.css/3.0.1/normalize.css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+ </head>
+ <body>
+  <div class="container">
+    <div class="row">
+      <h1 class="jumbotron">edgarberlinck.github.io</h1>
+    </div>
+    <div class="row">
+		<h1>Exemplos utilizando Bootstrap e Parse.com (Backend) </h1>
+		<ul>
+			<li><a href="/myworkout/0.1a/" target="_blank"> My Workout</a></li>
+			<details>Este app foi desenvolvido apenas para testes de latency do Parse.com. Um dia pode ser que eu resolva conclui-lo... :) </details>
+		</ul>
+	</div>
+	<div class="row">
+      <h1>Opensource</h1>
+      <ul>
+        <li><a href="/flexgetui/" target="_blank">Flexget ui</a></li>
+      </ul>
+    </div>
+	
+	<div class="row">
+      <h1>Games</h1>
+      <ul>
+        <li><a href="/nave/nave.html" target="_blank">Jogo de nave estilo <b>galaga</b> <i>(v1)</i></a></li>
+        <details>
+          Este game foi desenvolvido como exercício do livro "Desenvolvendo jogo com Html5 Canvas e Javascript". Fiz algumas alterações no código original.
+        </details>
+      </ul>
+    </div>
     
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
-
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-
-	<script src="//www.parsecdn.com/js/parse-1.3.2.min.js"></script>
-
-	<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Overlock:400,700' rel='stylesheet' type='text/css'>
-	<title>Bem Vindo ao Nofifly.</title>
-</head>
-
-<body>
-	<div class="container">	
-		<div class="jumbotron">
-		  <h1>Bem vindo ao Notifly <small>beta</small></h1>
-		  <p class="slogan">Nós procuramos passagens para você</p>
-		  <p>
-		  <a class="btn btn-primary btn-lg btn-title" onclick="help()" role="button">Como Funicona?</a>
-		  <a class="btn btn-primary btn-lg btn-title" onclick="goTo('notifly/register.html')" role="button">Registre-se</a></p>
-		</div>
-	</div>
-
-	<div class="container">
-		<div id="messages" class="alert alert-danger hide" role="alert">
-		<span class="fa fa-warning">Você não nos forneceu dados suficientes... Tem dúvidas? Acesse a ajuda.</span>
-		</div>
-	</div>
-
-	<div id="content" class="container">
-		<center><span class="fa fa-refresh fa-spin"></span></center>
-	</div>
-</body>
-	
-<script type="text/javascript" src="notifly/notifly.js"></script>
-<style type="text/css">
-	
-.pull-right {
-  border-left: 1px solid #D3D3D3;
-  padding-left: 15px;
-}
-
-h1 {
-	font-family: 'Lobster', cursive;
-}
-
-body {
-	font-family: 'Overlock', cursive;
-}
-
-.slogan {
-	font-family: 'Pacifico', cursive;
-}
-
-</style>
+    <div class="row">
+      <h1>Exemplos feitos em HTML5 + Canvas</h1>
+      <ol>
+       <li><a href="/canvas/01-test-canvas/index.html" target="_blank">Testar Canvas</a></li>
+       <li><a href="/canvas/02-path/estrela.html" target="_blank">Utilizando Path - Desenhando uma estrela</a></li>
+       <li><a href="/canvas/03-carregar-imagens/desenho-1.html" target="_blank">Carregando Imagens - 1</a></li>
+       <li><a href="/canvas/03-carregar-imagens/desenho-2.html" target="_blank">Carregando Imagens - 2</a></li>
+       <li><a href="/canvas/04-save-restore-state/index.html" target="_blank">Save e Restore State</a></li>
+       <li><a href="/canvas/05-animacoes/requestAnimationFrame.html" target="_blank">Bolinha passeando</a></li>
+       <li><a href="/canvas/07-sprites" target="_blank">Trabalhado com Sprites</a></li>
+       <li><a href="/canvas/08-interacao/trabalhandoComTeclado.html" target="_blank">Interação com o Teclado</a></li>
+       <li><a href="/canvas/08-interacao/tiro.html" target="_blank">Interação com o Teclado com keyup, keydown e keypress</a></li>
+       <li><a href="/canvas/09-spritesheets/sonic3.html" target="_blank">Interação com o Teclado com keyup, keydown e keypress e Spritesheets</a></li>
+       <li><a href="/canvas/10-colisoes/testeColisao01.html" target="_blank">Teste de Colisão</a></li>
+      </ol>
+    </div>
+  </div>
+ </body>
 </html>
+<link />
