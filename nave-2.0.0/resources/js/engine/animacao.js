@@ -35,7 +35,7 @@ Animacao.prototype = {
 
 		/* Como o fundo é sempre atualizado não tem sentido em limpar
 		   o canvas. Com isso economizamos algum processamento. */
-		//this.limparTela();
+		this.limparTela();
 		var agora = new Date().getTime();
 		if (this.ultimoCiclo == 0) this.ultimoCiclo = agora;
 		this.decorrido = agora - this.ultimoCiclo;
@@ -98,7 +98,17 @@ Animacao.prototype = {
 		
 		this.sprites = newSprites;
 		this.processamentos = newProcessamentos;
+	},
+
+	limparTudo: function () {
+	  if (this.ligado) 
+	  	return;
+	  this.sprites = [];
+	  this.processamentos = [];
+	  this.spritesExcluir = [];
+	  this.processamentosExcluir = [];
+
+	  this.ultimoCiclo = 0;
+	  this.decorrido = 0;
 	}
-
-
 }

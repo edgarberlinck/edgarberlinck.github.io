@@ -4,6 +4,7 @@ var SETA_ACIMA = 38;
 var SETA_ABAIXO = 40;
 var ESPACO = 32;
 var ENTER = 13;
+var ESCAPE = 27;
 
 function Teclado(elemento) {
 	this.elemento = elemento;
@@ -37,5 +38,11 @@ Teclado.prototype = {
 
 	disparou: function(tecla, callback) {
 		this.funcoesDisparo[tecla] = callback;
+	}, 
+
+	limparTudo: function () {
+	  this.pressionadas = [];
+	  this.disparadas = [];
+	  this.funcoesDisparo = [];
 	}
 }

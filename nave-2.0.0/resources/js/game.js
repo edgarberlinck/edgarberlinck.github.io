@@ -8,62 +8,83 @@
 'use strict';
 
 function Game(context) {
-	this.context = context;
-	utils = new Utils(context);
-	
-	// Start the keyboard
-	this.teclado = new Teclado(document);
-	this.hideMainMenu();
+  this.context = context;
+  utils = new Utils(context);
+  teclado = new Teclado(document);
+  animacao = new Animacao(context);
+  mainMenu = new Menu(this.context, teclado);
+    
+  this.hideMainMenu();
 }
 
 Game.prototype = {
-	loadResources : function() {
-		var audioUtils = new AudioUtils();
-		audioUtils.game = this;
-		audioUtils.loadResources();
+  loadResources : function () {
+    var audioUtils = new AudioUtils();
+    audioUtils.game = this;
+    audioUtils.loadResources();
 
-		var imageUtils = new ImageUtils();
-		imageUtils.game = this;
-		imageUtils.loadResources();
-	},
+    var imageUtils = new ImageUtils();
+    imageUtils.game = this;
+    imageUtils.loadResources();
+},
 
-	updateLoading: function() {
-		elementsLoaded++;
-		var progress = Math.floor((elementsLoaded / elementsToLoad) * 100);
-		utils.clearScreen();
-		utils.writeText("Loading Resources "+progress+"%");
+  updateLoading: function () {
+    elementsLoaded++;
+    var progress = Math.floor((elementsLoaded / elementsToLoad) * 100);
+    utils.clearScreen();
+    utils.writeText("Loading Resources "+progress+"%");
 
-		if (elementsLoaded === elementsToLoad)
-			game.showMainMenu(); //Atributo declarado em index.html
-	},
+    if (elementsLoaded === elementsToLoad){
+      game.showMainMenu(); //Atributo declarado em index.html
+    }
+  },
 
-	showMainMenu: function() {
-		utils.clearScreen();
-		//TODO: Desenhar imagem de fundo
-		this.context.save();
-		this.context.drawImage(generalImageFiles.fundoEspaco, 0, 0, this.context.canvas.width, this.context.canvas.height);
-		this.context.restore();
-		
-		
-		mainMenu = new Menu(this.teclado);
+  showMainMenu: function () {
+    utils.clearScreen();
+    animacao.novoSprite(mainMenu);
+        
+    teclado.disparou(SETA_ABAIXO, function () {
+      if ( selectedMenu < menu.length - 1 ) {
+        selectedMenu++;
+      } else {
+        selectedMenu = 0;
+      }
+    });
+        
+    teclado.disparou(SETA_ACIMA, function () {
+      if (selectedMenu === 0) {
+        selectedMenu - menu.length - 1;
+      } else {
+        selectedMenu--;
+      }
+    });
 
-		this.teclado.disparou(SETA_ABAIXO, function() {
-			mainMenu.atualizar();
-		});
-		this.teclado.disparou(SETA_ACIMA, function() {
-			mainMenu.atualizar();
-		});
-		this.teclado.disparou(ENTER, function() {
-			mainMenu.atualizar();
-		});
+    teclado.disparou(ENTER, function () {
+      mainMenu.processar();
+    });
 
-		document.getElementById("main-menu").style.display = "block";
-	},
+    animacao.ligar();
+  },
 
-	hideMainMenu: function() {
-		document.getElementById("main-menu").style.display = "none";	
-		this.teclado.disparou(SETA_ABAIXO, undefined);
-		this.teclado.disparou(SETA_ACIMA, undefined);
-		this.teclado.disparou(ENTER, undefined);
-	}
+  hideMainMenu: function () {
+    teclado.disparou(SETA_ABAIXO, undefined);
+    teclado.disparou(SETA_ACIMA, undefined);
+    teclado.disparou(ENTER, undefined);
+
+    animacao.excluirSprite(this.mainMenu);
+  },
+
+  resize: function () {
+    var canvas = this.context.canvas;
+    
+    canvas.width  = window.innerWidth - 30;
+    canvas.height = window.innerHeight - 30;
+    if (canvas.width < 500){
+      canvas.width = 500;
+    }
+    
+    if (canvas.height < 500){
+      canvas.height = 500;
+    }
+  }
 }

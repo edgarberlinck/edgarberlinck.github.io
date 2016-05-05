@@ -5,6 +5,7 @@ function Ovni(context, imagem, imgExplosao) {
 	this.y = 0;
 	this.velocidade = 0;
 	this.imgExplosao = imgExplosao;
+	this.energia = 50;
 }
 
 Ovni.prototype = {
@@ -32,6 +33,7 @@ Ovni.prototype = {
 	},
 
 	colidiuCom: function(sprite) {
+		/* Implementado no tiro.js
 		if (sprite instanceof Tiro) {
 			this.animacao.excluirSprite(this);
 			this.colisor.excluirSprite(this);
@@ -41,5 +43,27 @@ Ovni.prototype = {
 			var explosao = new Explosao(this.context, this.imgExplosao, this.x, this.y);
 			this.animacao.novoSprite(explosao);
 		}
-	}
+		*/
+	},
+
+	reciveDamage: function (tiro) {
+    	this.energia -= tiro.dano;
+    	if (this.energia <= 0) {
+    		this.animacao.excluirSprite(this);
+			this.colisor.excluirSprite(this);
+			this.explodir();
+    	}
+
+  	},
+
+  	explodir: function() {
+    var explosao1 = new Explosao(this.context, this.imgExplosao, this.x, this.y);
+    this.animacao.novoSprite(explosao1); 
+
+    var o = this;
+    
+    explosao1.fimDaExplosao = function() {   
+      o.animacao.excluirSprite(this);
+    }
+  }
 }
