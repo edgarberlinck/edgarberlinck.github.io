@@ -1,0 +1,49 @@
+<div>
+    <h3>{{title}}</h3>
+    <div class="row pull-right" style="margin-right : 5px">
+        <span class="fa fa-search" ng-click="showHideSearchBox()"></span>
+        <input type="text" class="input-xs" ng-show="viewSearchBox" ng-model="query.descricao" ng-blur="showHideSearchBox()">   
+    </div>
+    
+</div>
+<small><span class="fa fa-calendar-check-o" ng-hide="viewSearchBox"></span>&nbsp;<label ng-hide="viewSearchBox">{{projetosList.length}} Projetos encontrados.</label></small>
+<hr>
+
+<div ng-show="projetosList.length == 0" class="alert alert-warning" role="alert">Nenhum Projeto. Voc&ecirc; pode criar um clicando no bot&atilde;o <span class="fa fa-plus"></span> logo abaixo</div>
+
+<div ng-repeat="projeto in projetosList | filter : query |  orderBy:'+dataInicio' | startFrom:currentPage*pageSize | limitTo:pageSize track by projeto.id" class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-10 col-md-10">
+                <div class="row">
+                <div class="col-xs-3 col-md-4"><strong>Descri&ccedil;&atilde;o</strong></div>
+                    <div class="col-xs-9 col-md-8">{{projeto.descricao}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-md-2"><strong>In&iacute;cio</strong></div>
+                    <div class="col-xs-3 col-md-4">{{projeto.dataInicio | date:'dd/MM/yy'}}</div>
+                    <div class="col-xs-3 col-md-2"><strong>Fim</strong></div>
+                    <div class="col-xs-3 col-md-4">{{projeto.dataFim | date:'dd/MM/yy'}}</div>
+                </div>  
+            </div>
+            <div class="col-xs-2 col-md-2">
+                <a ng-click="editProjeto(projeto)" class="pull-right"><span class="fa fa-edit fa-2x"></span></a>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<div class="fixed-botton">
+    <button ng-hide="optionsVisible" class="btn btn-default btn-md" ng-click="first()"><span class="fa fa-angle-double-left"></span></button>
+    <button ng-hide="optionsVisible"  class="btn btn-default btn-md" ng-click="prior()"><span class="fa fa-angle-left"></span></button>
+    <span ng-hide="optionsVisible" ><span class="label label-default">{{currentPage +1}}</span>  de <span class="label label-default">{{totalPages}}</span></span>
+    <button ng-hide="optionsVisible" class="btn btn-default btn-md" ng-click="next()"><span class="fa fa-angle-right"></span></button>
+    <button ng-hide="optionsVisible" class="btn btn-default btn-md" ng-click="last()"><span class="fa fa-angle-double-right"></span></button>
+    
+    <button class="y hC pull-right" ng-click="showOptions()"><span class="fa fa-plus fa-2x fa-inverse" style="margin-top: 3px"></span></button>
+    
+    <button ng-show="optionsVisible"  class="y hB pull-right" ng-click="novoProjeto()"><span class="fa fa-calendar-check-o fa-inverse"></span></button>
+    
+    <button ng-show="optionsVisible"  class="y hB pull-right" ng-click="importarEdital()"><span class="fa fa-cloud-download fa-inverse"></span></button>
+</div>

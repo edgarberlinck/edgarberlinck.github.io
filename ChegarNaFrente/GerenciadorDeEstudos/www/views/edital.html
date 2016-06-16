@@ -1,0 +1,88 @@
+<h3>{{title}}</h3>
+
+<div class="container">
+    <div class="row">
+        <label for="descricao" class="control-label">Descricao</label>
+    </div>
+    <div class="row">
+        <input type="text" id="descricao" class="form-control input-xs" ng-model="projeto.descricao">
+    </div>
+
+    <div class="row">
+        <label for="inicio" class="control-label">Inicio</label>
+    </div>
+    <div class="row">
+        <input type="date" id="inicio" class="form-control input-xs" ng-model="projeto.inicio">
+    </div>
+    <div class="row">
+        <label for="fim" class="control-label">Fim</label>
+    </div>
+    <div class="row">
+        <input type="date" id="fim" class="form-control input-xs" ng-model="projeto.fim">
+    </div>
+    <hr>
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Disponibilidade Semanal (h)
+            </div>
+            <div class="panel-body">
+                <div>
+                    <label for="disponibilidadeDiasUteis" class="control-label">Dias Uteis</label>
+                </div>
+                <div>
+                    <input type="number" id="disponibilidadeDiasUteis" ng-model="projeto.disponibilidadeDiasUteis">
+                </div>
+                <div>
+                    <label for="disponibilidadeFinsDeSemana" class="control-label">Fins de Semana</label>
+                </div>
+                <div>
+                    <input type="number" id="disponibilidadeFinsDeSemana" ng-model="projeto.disponibilidadeFinsDeSemana">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-6 col-md-6"><h4>Materias</h4></div>
+        <div class="col-xs-6 col-md-6">
+            <button class="btn btn-default pull-right"><span class="fa fa-plus"></span> Nova Mat&eacute;ria</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <div ng-repeat-start="materia in edital.materiasList" class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading{{materia.id}}">
+                <div class="row">
+                    <div class="col-xs-2 col-md-2">
+                        <span>{{materia.peso}}</span>
+                    </div>
+                    <div class="col-xs-8 col-md-8">
+                        {{materia.descricao}}
+                    </div>
+                    <div class="col-xs-2 col-md-2">
+                        <button class="btn btn-xs" type="button" data-toggle="collapse" data-target="#{{materia.id}}" aria-expanded="false" aria-controls="{{materia.id}}">
+                          <span class="fa fa-sort-up"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="{{materia.id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{materia.id}}">
+              <div class="panel-body">
+                 <ul class="list-group">                     
+                     <li class="list-group-item" ng-repeat="conteudo in materia.conteudoList">
+                         <div class="row">
+                             <div class="col-xs-10 col-md-10">
+                                 {{conteudo.descricao}}
+                             </div>
+                             <div class="col-xs-2 col-md-2"><span class="fa fa-edit fa-fw"></span></div>
+                         </div>
+                     </li>
+                 </ul>
+              </div>
+            </div>
+          </div>
+          <div ng-repeat-end></div>
+        </div>
+    </div>
+
+</div>
