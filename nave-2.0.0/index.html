@@ -1,73 +1,25 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <!-- JS-ondemand lib -->
-  <script type="text/javascript" src="resources/js/lib/ensure/jquery.js"></script>
-  <script type="text/javascript" src="resources/js/lib/ensure/ensure.js"></script>
-  
-  <!-- carregar globais -->
-  <script type="text/javascript" src="resources/js/global/version.js"></script>
-  <script type="text/javascript" src="resources/js/global/global-flags.js"></script>
-  <script type="text/javascript" src="resources/js/global/global-resources.js"></script>
-
-  <!-- carregar utilizatios -->
-  <script type="text/javascript" src="resources/js/utils/utils.js"></script>
-  <script type="text/javascript" src="resources/js/utils/audioUtils.js"></script>
-  <script type="text/javascript" src="resources/js/utils/imageUtils.js"></script>
-
-  <!-- Carregar engine -->
-  <script type="text/javascript" src="resources/js/engine/animacao.js"></script>
-  <script type="text/javascript" src="resources/js/engine/teclado.js"></script>
-  <script type="text/javascript" src="resources/js/engine/spritesheet.js"></script>
-  <script type="text/javascript" src="resources/js/engine/colisor.js"></script>
-    
-  <!-- Carregar elementos do jogo -->
-  <script type="text/javascript" src="resources/js/menu.js"></script>
-  <script type="text/javascript" src="resources/js/painel.js"></script>
-  <script type="text/javascript" src="resources/js/ovni.js"></script>
-  <script type="text/javascript" src="resources/js/explosao.js"></script>
-  <script type="text/javascript" src="resources/js/nave.js"></script>
-  <script type="text/javascript" src="resources/js/tiro.js"></script>
-  <script type="text/javascript" src="resources/js/fundo.js"></script>
-  <script type="text/javascript" src="resources/js/game.js"></script>
-  <script type="text/javascript" src="resources/js/machinegun.js"></script>
-  <script type="text/javascript" src="resources/js/hero.js"></script>
-  <script type="text/javascript" src="resources/js/heroSelect.js"></script>
-  <script type="text/javascript" src="resources/js/game/gameController.js"></script>
-  <script type="text/javascript" src="resources/js/game/stageController.js"></script>
-  
-  <style type="text/css">
-    @import url(http://fonts.googleapis.com/css?family=VT323);
-  </style>
-  
-  <script type="text/javascript">
-  		var game;
-      var teclado;
-      var mainMenu;
-      var utils;
-      var animacao;
-      var teclado;
-      var gameController;
-      
-  		window.onload = function(){
-  			var canvas = document.getElementById("game-canvas");
-  			var context = canvas.getContext("2d");
-
-  			game = new Game(context);
-  			game.loadResources();
-        game.showMainMenu();
-        game.resize();
-  		}
-
-      window.onresize = function () {
-        game.resize();
-      }
-  </script>
-</head>
-<body>
-	<canvas id="game-canvas" width="500" height="500" style="border:1px solid #000000;">
-		Seu navegador não suporta o Canvas do HTML5.
-	</canvas>
-</body>
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | SpaceShooter</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="TemplateData/UnityProgress.js"></script>  
+    <script src="Build/UnityLoader.js"></script>
+    <script>
+      var gameInstance = UnityLoader.instantiate("gameContainer", "Build/WebGL.json", {onProgress: UnityProgress});
+    </script>
+  </head>
+  <body>
+    <div class="webgl-content">
+      <div id="gameContainer" style="width: 600px; height: 900px"></div>
+      <div class="footer">
+        <div class="webgl-logo"></div>
+        <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
+        <div class="title">SpaceShooter</div>
+      </div>
+    </div>
+  </body>
 </html>
