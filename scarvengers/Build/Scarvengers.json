@@ -1,0 +1,9 @@
+{
+"TOTAL_MEMORY": 268435456,
+"dataUrl": "Scarvengers.data.unityweb",
+"asmCodeUrl": "Scarvengers.asm.code.unityweb",
+"asmMemoryUrl": "Scarvengers.asm.memory.unityweb",
+"asmFrameworkUrl": "Scarvengers.asm.framework.unityweb",
+"splashScreenStyle": "Dark",
+"backgroundColor": "#222C36"
+}
