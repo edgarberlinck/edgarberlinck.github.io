@@ -1,0 +1,9 @@
+{
+"TOTAL_MEMORY": 268435456,
+"dataUrl": "nigthmares.data.unityweb",
+"asmCodeUrl": "nigthmares.asm.code.unityweb",
+"asmMemoryUrl": "nigthmares.asm.memory.unityweb",
+"asmFrameworkUrl": "nigthmares.asm.framework.unityweb",
+"splashScreenStyle": "Dark",
+"backgroundColor": "#222C36"
+}
