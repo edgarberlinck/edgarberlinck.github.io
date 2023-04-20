@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { SupportedLanguages } from './common/types'
+import { SupportedLanguages } from '../common/types'
 
 const supportedLanguages: SupportedLanguages = {
   pt: { nativeName: 'Português', flag: 'br' },
