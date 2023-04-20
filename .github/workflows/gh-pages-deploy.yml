@@ -5,9 +5,9 @@ name: Github Page Deployment
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 env:
   GITHUB_SUBDOMAIN: /
