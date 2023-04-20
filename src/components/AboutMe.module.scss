@@ -1,0 +1,47 @@
+@import '../variables.scss';
+
+.about {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  
+  & > :first-child {
+    & > :nth-child(3) {
+      font-weight: bold;
+    }
+  }
+
+  & > :last-child {
+    & > img {
+      border-radius: 50%;
+      border: solid 8px black;
+      align-self: flex-end;
+      border-color: $blue-300;
+    }
+  } 
+}
+
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+    .about {
+      flex-direction: column-reverse;
+      justify-content: center;
+      gap: 0;
+
+      & > :last-child {
+        display: flex;
+        justify-content: center;
+
+        & > img {
+          border-radius: 50%;
+          border: solid 8px black;
+          align-self: flex-end;
+          transform: scale(.7);
+        }
+      } 
+    }
+
+}

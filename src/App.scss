@@ -1,42 +1,49 @@
+@import './variables.scss';
+@import url('https://fonts.cdnfonts.com/css/montserrat');
+
+body {
+  background-color: $blue-950;
+  font-family: 'Montserrat', sans-serif;
+}
+
+button {
+  background-color: $blue-300;
+  border-radius: 25px;
+  box-shadow: $blue-500 1px 3px 5px;
+  color: $blue-700;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fi {
+  margin: 0 5px;
+}
+
+.fi-selected {
+  border-bottom: solid $blue-200 2px;
+}
+
 #root {
-  max-width: 1280px;
+  width: 50vw;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
+  color: $blue-100;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+
+    #root {
+      margin: 0 auto;
+      padding: 0;
+      margin: 0 auto;
+    }
+
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
