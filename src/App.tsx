@@ -15,6 +15,7 @@ function App() {
 
       <AboutMe />
     </div>
+    
   )
 }
 
