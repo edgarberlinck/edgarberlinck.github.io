@@ -2,5 +2,9 @@
   "greet": "Hej!",
   "about": "Jag heter Edgar Muniz Berlinck, jag är en mjukvaruutvecklare sedan 2001. För närvarande är jag baserad i Helsingborg, Sverige.",
   "social": "Låt oss ansluta? Följer mina sociala medier",
-  "mentoring": "Jag erbjuder karriär- och beteende mentorskap. Kontakta mig för att lära dig mer."
+  "mentoring": "Jag erbjuder karriär- och beteende mentorskap. Kontakta mig för att lära dig mer.",
+  "label-twitter": "Twitter - @edgarberlinck",
+  "label-telegram": "Telegram - @edgarberlinck",
+  "label-github": "Github - @edgarberlinck",
+  "label-linkedin": "Linkedin - @edgarberlinck"
 }
