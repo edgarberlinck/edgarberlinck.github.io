@@ -27,6 +27,11 @@ ul {
   border-bottom: solid $blue-200 2px;
 }
 
+.flex {
+  display: flex;
+  gap: 1rem
+}
+
 #root {
   width: 50vw;
   margin: 0 auto;

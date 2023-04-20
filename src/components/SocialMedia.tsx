@@ -1,10 +1,15 @@
+import { SocialIcon } from 'react-social-icons';
+import { useTranslation } from 'react-i18next'
+
 export default function SocialMedia() {
+  const { t } = useTranslation()
+
   return (
-    <ul>
-      <li>Twitter: <a href="https://twitter.com/edgarberlinck" target="_blank">@edgarberlinck</a></li>
-      <li>Telegram: <a href="https://t.me/edgarberlinck">@edgarberlinck</a></li>
-      <li>Github: <a href="https://github.com/edgarberlinck">@edgarberlinck</a></li>
-      <li>Linkedin: <a href="https://linkedin.com/in/edgarberlinck">@edgarberlinck</a></li>
-    </ul>
+    <div className='flex'>
+      <SocialIcon url='https://twitter.com/edgarberlinck' network='twitter' fgColor='white' label={t('label-twitter') as string} />
+      <SocialIcon url='https://t.me/edgarberlinck' network='telegram' fgColor='white' label={t('label-telegram') as string} />
+      <SocialIcon url='https://github.com/edgarberlinck' network='github' bgColor='white' label={t('label-github') as string} />
+      <SocialIcon url='https://linkedin.com/in/edgarberlinck' network='linkedin' fgColor='white' label={t('label-linkedin') as string} />
+    </div>
   )
 }
