@@ -10,6 +10,7 @@ export default function SocialMedia() {
       <SocialIcon url='https://t.me/edgarberlinck' network='telegram' fgColor='white' label={t('label-telegram') as string} />
       <SocialIcon url='https://github.com/edgarberlinck' network='github' bgColor='white' label={t('label-github') as string} />
       <SocialIcon url='https://linkedin.com/in/edgarberlinck' network='linkedin' fgColor='white' label={t('label-linkedin') as string} />
+      <SocialIcon url='https://www.twitch.tv/edgarberlinck' network='twitch' fgColor='white' label={t('label-twitch') as string} />
     </div>
   )
 }
