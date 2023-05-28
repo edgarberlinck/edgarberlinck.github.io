@@ -17,7 +17,7 @@ export default function Podcast() {
 
     fetchData()
   }, [])
-  console.log(podcast)
+
   return (
     <>
       <h2>{t('podcast')}</h2>
