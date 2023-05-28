@@ -18,7 +18,6 @@ export interface RSSImage {
 }
 
 export interface PodcastEpisode {
-  title: string
   guid: string
   title: string
   pubDate: string
