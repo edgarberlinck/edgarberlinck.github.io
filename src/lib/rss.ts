@@ -8,7 +8,7 @@ export interface PodcastFeed {
   language: string
   title: string
   lastBuildDate: string
-  items: PodcastEpisode[]
+  item: PodcastEpisode[]
 }
 
 export interface RSSImage {
@@ -22,6 +22,7 @@ export interface PodcastEpisode {
   title: string
   pubDate: string
   link: string
+  description: string
 }
 
 export default async function parseFeed(feedURL: string): Promise<PodcastFeed> {

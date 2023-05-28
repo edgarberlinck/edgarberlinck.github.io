@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import parseFeed, { PodcastFeed } from '../lib/rss'
 import style from './podcast.module.scss'
+import EpisodeList from './EpisodeList'
 
 export default function Podcast() {
   const { t } = useTranslation()
@@ -9,6 +10,7 @@ export default function Podcast() {
 
   useEffect(() => {
     const fetchData = async () => {
+      //TODO: I can refactor this and turn it into a hook. I'll keep this in mind
       const feed = await parseFeed('https://anchor.fm/s/30c7a0d0/podcast/rss')
       setPodcast(feed)
     }
@@ -25,6 +27,7 @@ export default function Podcast() {
         <img src={podcast?.image.url} alt={podcast?.title}></img>
         <figcaption>{podcast?.title}</figcaption>
       </figure>
+      {podcast?.item && <EpisodeList episodes={podcast?.item} />}
       {/* <h3>{t('podcast-feat')}</h3> */}
     </>
   )

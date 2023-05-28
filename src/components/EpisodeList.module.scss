@@ -1,0 +1,14 @@
+.episode-wrapper {
+  & h4 {
+    margin: 0;
+    margin-top: 1rem
+  }
+
+  & > small {
+    font-style: italic;
+  }
+
+  & > p {
+    text-align: justify;
+  }
+}
