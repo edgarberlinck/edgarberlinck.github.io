@@ -5,9 +5,7 @@ name: Github Page Deployment
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 env:
   GITHUB_SUBDOMAIN: /
@@ -19,36 +17,36 @@ jobs:
       matrix:
         node-version: [19.x.x]
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v2.2.4
-      with:
-        version: latest
-    - name: Get pnpm store directory
-      id: pnpm-cache
-      shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-    - uses: actions/cache@v3
-      name: Setup pnpm cache
-      with:
-        path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store-
-    - name: Install Deps
-      run: pnpm install --frozen-lockfile
-    - name: Build
-      run: pnpm build --base=$GITHUB_SUBDOMAIN --outDir "/tmp/build" --emptyOutDir
-    - name: Upload GitHub Pages artifact
-      uses: actions/upload-pages-artifact@v1.0.8
-      with:
-        name: github-pages.tar
-        path: /tmp/build
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: latest
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      - name: Install Deps
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm build --base=$GITHUB_SUBDOMAIN --outDir "/tmp/build" --emptyOutDir
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v1.0.8
+        with:
+          name: github-pages.tar
+          path: /tmp/build
 
   deploy:
     needs: build
@@ -61,11 +59,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v2
-      with:
-        artifact_name: github-pages.tar
-    
-
-      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+        with:
+          artifact_name: github-pages.tar
